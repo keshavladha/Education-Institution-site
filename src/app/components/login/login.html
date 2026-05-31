@@ -7,15 +7,15 @@
       {{ errorMessage }}
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" formControlName="email" placeholder="Enter your email" />
+        <label for="student_email">Email</label>
+        <input type="email" id="student_email" name="student_email" autocomplete="off" formControlName="email" placeholder="Enter your email" />
       </div>
 
       <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" formControlName="password" placeholder="••••••••" />
+        <label for="student_password">Password</label>
+        <input type="password" id="student_password" name="student_password" autocomplete="new-password" formControlName="password" placeholder="••••••••" />
       </div>
 
       <button type="submit" class="submit-btn" [disabled]="loginForm.invalid || isLoading">

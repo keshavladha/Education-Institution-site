@@ -10,12 +10,12 @@
       <i class="fa-solid fa-circle-exclamation me-2"></i> {{ errorMessage }}
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
       <div class="form-group">
         <label for="admin_email">Admin Email</label>
         <div class="input-icon-wrapper">
           <i class="fa-solid fa-envelope text-muted"></i>
-          <input type="email" id="admin_email" formControlName="email" placeholder="e.g. admin@futureinstitute.edu" />
+          <input type="email" id="admin_email" name="admin_email" autocomplete="off" formControlName="email" placeholder="e.g. admin@futureinstitute.edu" />
         </div>
       </div>
 
@@ -23,7 +23,7 @@
         <label for="admin_password">Security Password</label>
         <div class="input-icon-wrapper">
           <i class="fa-solid fa-lock text-muted"></i>
-          <input [type]="showPassword ? 'text' : 'password'" id="admin_password" formControlName="password" placeholder="••••••••" />
+          <input [type]="showPassword ? 'text' : 'password'" id="admin_password" name="admin_password" autocomplete="new-password" formControlName="password" placeholder="••••••••" />
           <i class="fa-solid toggle-password" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword" (click)="togglePasswordVisibility()"></i>
         </div>
       </div>
