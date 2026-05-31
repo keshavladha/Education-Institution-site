@@ -145,6 +145,7 @@ export class Admin implements OnInit {
 
   async loadStudentGrades() {
     if (!this.selectedStudent) return;
+    console.log('📚 Loading grades for student:', this.selectedStudent.id);
     try {
       const { data, error } = await this.supabase.client
         .from('test_marks')
@@ -155,17 +156,25 @@ export class Admin implements OnInit {
       if (error) throw error;
       
       // Load and merge local test marks
-      const localMarks = JSON.parse(localStorage.getItem('local_test_marks') || '[]');
+      const localData = localStorage.getItem('local_test_marks');
+      console.log('📦 Raw localStorage data:', localData);
+      const localMarks = JSON.parse(localData || '[]');
+      console.log('📊 Parsed local marks count:', localMarks.length);
       const filteredLocal = localMarks.filter((m: any) => m.student_id === this.selectedStudent?.id);
+      console.log('🔍 Filtered local marks for this student:', filteredLocal.length);
       
       this.studentMarks = [...filteredLocal, ...(data || [])].sort((a: any, b: any) => 
         new Date(b.test_date).getTime() - new Date(a.test_date).getTime()
       );
+      console.log('✅ Final studentMarks array:', this.studentMarks);
     } catch (e: any) {
       console.warn('⚠️ Failed to load grades from Supabase, pulling from local storage fallback:', e.message);
-      const localMarks = JSON.parse(localStorage.getItem('local_test_marks') || '[]');
+      const localData = localStorage.getItem('local_test_marks');
+      const localMarks = JSON.parse(localData || '[]');
+      console.log('📦 Fallback - localStorage data:', localData, 'parsed:', localMarks);
       this.studentMarks = localMarks.filter((m: any) => m.student_id === this.selectedStudent?.id)
         .sort((a: any, b: any) => new Date(b.test_date).getTime() - new Date(a.test_date).getTime());
+      console.log('📊 Fallback - filtered marks:', this.studentMarks);
     }
   }
 
@@ -273,20 +282,30 @@ export class Admin implements OnInit {
         if (error) throw error;
       } catch (dbErr: any) {
         console.warn('⚠️ Supabase grade insert failed, using local storage fallback:', dbErr.message);
-        const localMarks = JSON.parse(localStorage.getItem('local_test_marks') || '[]');
-        const mockMark = {
-          id: 'MOCK-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
-          student_id: this.selectedStudent.id,
-          subject: this.newMarkSubject,
-          test_name: this.newMarkTestName,
-          max_marks: this.newMarkMax,
-          obtained_marks: this.newMarkObtained,
-          percentage: percentage,
-          grade: grade,
-          test_date: this.newMarkDate
-        };
-        localMarks.push(mockMark);
-        localStorage.setItem('local_test_marks', JSON.stringify(localMarks));
+        try {
+          const existingData = localStorage.getItem('local_test_marks');
+          console.log('📦 Existing localStorage data:', existingData);
+          const localMarks = JSON.parse(existingData || '[]');
+          const mockMark = {
+            id: 'MOCK-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
+            student_id: this.selectedStudent.id,
+            subject: this.newMarkSubject,
+            test_name: this.newMarkTestName,
+            max_marks: this.newMarkMax,
+            obtained_marks: this.newMarkObtained,
+            percentage: percentage,
+            grade: grade,
+            test_date: this.newMarkDate,
+            created_at: new Date().toISOString()
+          };
+          localMarks.push(mockMark);
+          localStorage.setItem('local_test_marks', JSON.stringify(localMarks));
+          console.log('✅ Saved to localStorage:', mockMark);
+          console.log('📊 Total marks in storage:', localMarks.length);
+        } catch (storageErr: any) {
+          console.error('💥 localStorage error:', storageErr);
+          alert('Failed to save to local storage: ' + storageErr.message);
+        }
       }
 
       await this.loadStudentGrades();
