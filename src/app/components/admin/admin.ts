@@ -80,6 +80,16 @@ export class Admin implements OnInit {
     }
   }
 
+  get enrolledSubjects(): string[] {
+    if (!this.selectedStudent || !this.selectedStudent.course) {
+      return ['Accountancy', 'Economics', 'Business Studies', 'Mathematics'];
+    }
+    return this.selectedStudent.course
+      .split(',')
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
+  }
+
   get filteredStudents(): Student[] {
     if (!this.students) return [];
     try {

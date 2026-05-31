@@ -215,10 +215,7 @@
             <div class="col-md-4">
               <select class="form-select form-select-sm" [(ngModel)]="newMarkSubject">
                 <option value="" disabled selected>-- Subject --</option>
-                <option value="Accountancy">Accountancy</option>
-                <option value="Economics">Economics</option>
-                <option value="Business Studies">Business Studies</option>
-                <option value="Mathematics">Mathematics</option>
+                <option *ngFor="let sub of enrolledSubjects" [value]="sub">{{ sub }}</option>
               </select>
             </div>
             <div class="col-md-5">
