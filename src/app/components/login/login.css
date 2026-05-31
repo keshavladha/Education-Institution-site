@@ -1,0 +1,207 @@
+/* Student Login Component Styling */
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background: linear-gradient(135deg, #EEF1FB 0%, #F8F9FC 100%);
+  padding: 2.5rem 1rem;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 12px 40px 0 rgba(72, 92, 215, 0.08);
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 450px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 45px rgba(72, 92, 215, 0.12);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: #2E3FA3;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+}
+
+.subtitle {
+  text-align: center;
+  color: hsl(220, 15%, 45%); /* Light text */
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.error-banner {
+  background-color: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  color: #dc3545;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #2E3FA3;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border-radius: 8px;
+  border: 1px solid hsla(220, 20%, 85%, 0.6);
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  color: hsl(220, 25%, 15%);
+  outline: none;
+}
+
+input:focus {
+  border-color: #485CD7;
+  box-shadow: 0 0 0 4px rgba(72, 92, 215, 0.12);
+  background: #ffffff;
+}
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #485CD7 0%, #3A4FC4 100%);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.9rem;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 4px 15px rgba(72, 92, 215, 0.3);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(72, 92, 215, 0.45);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  background: #cccccc;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.switch-auth {
+  text-align: center;
+  margin-top: 1.75rem;
+  font-size: 0.9rem;
+  color: hsl(220, 15%, 45%);
+  margin-bottom: 0;
+}
+
+.switch-auth a {
+  color: #485CD7;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  margin-left: 0.25rem;
+}
+
+.switch-auth a:hover {
+  color: #3A4FC4;
+  text-decoration: underline;
+}
+
+.info-box {
+  background-color: rgba(72, 92, 215, 0.08);
+  border: 1px solid rgba(72, 92, 215, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.info-box i {
+  color: #485CD7;
+  font-size: 1.1rem;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+}
+
+.info-box p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: hsl(220, 25%, 25%);
+  line-height: 1.5;
+}
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  .auth-container {
+    padding: 1.5rem 0.75rem;
+    min-height: 70vh;
+  }
+  .glass-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  .subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  input {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.9rem;
+  }
+  .submit-btn {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  .info-box {
+    padding: 0.75rem;
+    margin-top: 1rem;
+  }
+}

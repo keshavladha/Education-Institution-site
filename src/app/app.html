@@ -1,0 +1,117 @@
+<!-- Premium Navigation -->
+<nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+  <div class="container">
+    <a class="navbar-brand-custom" routerLink="/">
+      <img src="/logo.png" alt="Future Institute of Commerce Logo" onerror="this.style.display='none'">
+      <span>Future Institute of Commerce</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="about">About</a></li>
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="courses">Courses</a></li>
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="faculty">Faculty</a></li>
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="testimonials">Testimonials</a></li>
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="contact">Contact</a></li>
+        
+        <!-- Auth Links - Dashboard only for students, not admins -->
+        <li class="nav-item" *ngIf="isLoggedIn && !isAdmin">
+          <a class="nav-link-custom" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        </li>
+        <li class="nav-item" *ngIf="isAdmin">
+          <a class="nav-link-custom text-warning fw-bold" routerLink="/admin" routerLinkActive="active">Admin</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link-custom fw-bold" routerLink="/login">Login</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a class="nav-link-custom fw-bold text-danger" (click)="logout()" style="cursor: pointer;">Logout</a>
+        </li>
+
+        <li class="nav-item nav-cta">
+          <a class="btn btn-accent" routerLink="/payment" routerLinkActive="active">
+            <i class="fa-solid fa-credit-card"></i> Pay Fees
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link-custom nav-icon" routerLink="/year" routerLinkActive="active" title="Institute Memories Timeline">
+            <i class="fa-solid fa-images"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- View Outlet -->
+<router-outlet></router-outlet>
+
+<!-- Premium Interactive Footer -->
+<footer class="footer-custom">
+  <div class="container">
+    <div class="row g-4">
+      
+      <div class="col-lg-4">
+        <h4 class="footer-title-custom">Future Institute of Commerce</h4>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.8;">
+          Empowering students with comprehensive commerce knowledge and capabilities since 2005. Our deep commitment lies in academic greatness and shaping professional pathways.
+        </p>
+        <div class="mt-4">
+          <a href="#" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="footer-social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="footer-social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="footer-social-icon"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <div class="col-lg-2 offset-lg-1">
+        <h4 class="footer-title-custom">Quick Links</h4>
+        <ul class="footer-links-custom">
+          <li><a routerLink="/">Home</a></li>
+          <li><a routerLink="/" fragment="about">About Us</a></li>
+          <li><a routerLink="/" fragment="courses">Courses</a></li>
+          <li><a routerLink="/" fragment="faculty">Faculty</a></li>
+          <li><a routerLink="/" fragment="testimonials">Testimonials</a></li>
+          <li><a routerLink="/" fragment="contact">Contact</a></li>
+          <li class="mt-2 pt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important;"><a routerLink="/admin-login"><i class="fa-solid fa-lock me-1"></i> Admin Portal</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-2">
+        <h4 class="footer-title-custom">Our Courses</h4>
+        <ul class="footer-links-custom">
+          <li><a routerLink="/" fragment="courses">Accountancy</a></li>
+          <li><a routerLink="/" fragment="courses">Business Studies</a></li>
+          <li><a routerLink="/" fragment="courses">Economics</a></li>
+          <li><a routerLink="/" fragment="courses">Mathematics</a></li>
+          <li><a routerLink="/year">Timelines</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-3">
+        <h4 class="footer-title-custom">Contact Info</h4>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem;" class="mb-2">
+          <i class="fas fa-map-marker-alt text-warning me-2"></i> 123 Education Street, Academic District, City - 100001
+        </p>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem;" class="mb-2">
+          <i class="fas fa-phone-alt text-warning me-2"></i> +91 9876543210
+        </p>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem;" class="mb-2">
+          <i class="fas fa-envelope text-warning me-2"></i> info@futureinstitute.edu
+        </p>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem;">
+          <i class="fas fa-clock text-warning me-2"></i> Mon-Sat: 9:00 AM - 6:00 PM
+        </p>
+      </div>
+
+    </div>
+    
+    <div class="footer-copyright">
+      <p>© 2025 Future Institute of Commerce. All rights reserved.</p>
+    </div>
+
+  </div>
+</footer>

@@ -1,0 +1,40 @@
+<div class="auth-container">
+  <div class="glass-card">
+    <div class="brand-shield mb-3 text-center">
+      <i class="fa-solid fa-user-shield animate-pulse"></i>
+    </div>
+    <h2>Admin Portal</h2>
+    <p class="subtitle">Secure workspace for system administrators.</p>
+
+    <div *ngIf="errorMessage" class="error-banner animate__animated animate__shakeX">
+      <i class="fa-solid fa-circle-exclamation me-2"></i> {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="admin_email">Admin Email</label>
+        <div class="input-icon-wrapper">
+          <i class="fa-solid fa-envelope text-muted"></i>
+          <input type="email" id="admin_email" formControlName="email" placeholder="e.g. admin@futureinstitute.edu" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="admin_password">Security Password</label>
+        <div class="input-icon-wrapper">
+          <i class="fa-solid fa-lock text-muted"></i>
+          <input type="password" id="admin_password" formControlName="password" placeholder="••••••••" />
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="loginForm.invalid || isLoading">
+        <span *ngIf="!isLoading"><i class="fa-solid fa-key me-1"></i> Authorize & Enter</span>
+        <span *ngIf="isLoading"><i class="fa-solid fa-circle-notch fa-spin me-1"></i> Authorizing...</span>
+      </button>
+    </form>
+
+    <div class="info-box">
+      <p>This is a protected administrative route. All unauthorized connection attempts are logged.</p>
+    </div>
+  </div>
+</div>

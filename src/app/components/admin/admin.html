@@ -1,0 +1,350 @@
+<div class="admin-container">
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="admin-title">Admin Dashboard</h1>
+      <button class="btn btn-primary" (click)="navigateToAddStudent()">
+        <i class="fas fa-plus me-2"></i>Add New Student
+      </button>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="card admin-card mb-4 border-0">
+      <div class="card-body p-3">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-5">
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0 text-muted">
+                <i class="fas fa-search"></i>
+              </span>
+              <input type="text" 
+                     class="form-control border-start-0 ps-0" 
+                     placeholder="Search by name, email, phone, father's name..." 
+                     [(ngModel)]="searchQuery">
+            </div>
+          </div>
+          
+          <div class="col-6 col-md-3">
+            <select class="form-select" [(ngModel)]="classFilter">
+              <option value="">All Classes</option>
+              <option value="11th">11th Grade</option>
+              <option value="12th">12th Grade</option>
+              <option value="B.Com 1st Year">B.Com 1st Year</option>
+              <option value="B.Com 2nd Year">B.Com 2nd Year</option>
+              <option value="B.Com 3rd Year">B.Com 3rd Year</option>
+            </select>
+          </div>
+
+          <div class="col-6 col-md-2">
+            <select class="form-select" [(ngModel)]="statusFilter">
+              <option value="">All Statuses</option>
+              <option value="complete">Profile Completed</option>
+              <option value="incomplete">Incomplete Profile</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-2 d-grid">
+            <button class="btn btn-outline-secondary" (click)="clearFilters()" [disabled]="!searchQuery && !classFilter && !statusFilter">
+              <i class="fas fa-times me-1"></i>Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card admin-card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Student Management</h5>
+        <span class="badge bg-white text-primary" *ngIf="!isLoading">{{ filteredStudents.length }} found</span>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Class</th>
+                <th>Course</th>
+                <th>Profile Complete</th>
+                <th>Created</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="isLoading">
+                <td colspan="7" class="text-center py-4">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngFor="let student of filteredStudents">
+                <td data-label="Name" class="fw-bold">{{ student.full_name }}</td>
+                <td data-label="Email">{{ student.email }}</td>
+                <td data-label="Class">{{ student.class || 'N/A' }}</td>
+                <td data-label="Course">{{ student.course || 'N/A' }}</td>
+                <td data-label="Profile">
+                  <span class="badge" [class.bg-success]="student.profile_complete" [class.bg-warning]="!student.profile_complete">
+                    {{ student.profile_complete ? 'Yes' : 'No' }}
+                  </span>
+                </td>
+                <td data-label="Created">{{ student.created_at | date:'mediumDate' }}</td>
+                <td data-label="Actions" class="text-end">
+                  <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="openManageHub(student)">
+                    <i class="fa-solid fa-sliders me-1"></i>Manage
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="!isLoading && students.length === 0">
+                <td colspan="7" class="text-center py-4 text-muted">
+                  No students found. Add your first student to get started.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CENTRAL STUDENT MANAGEMENT HUB MODAL OVERLAY ─── -->
+<div class="hub-overlay" *ngIf="showManageHub" (click)="closeManageHub()">
+  <div class="hub-modal-card" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="hub-header d-flex justify-content-between align-items-start">
+      <div>
+        <span class="badge bg-accent-soft text-primary px-2 py-1 mb-2">MANAGEMENT HUB</span>
+        <h3 class="hub-title mb-1">{{ selectedStudent?.full_name }}</h3>
+        <p class="text-muted small mb-0"><i class="fa-solid fa-envelope me-1"></i>{{ selectedStudent?.email }}</p>
+      </div>
+      <button class="btn-close-hub" (click)="closeManageHub()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Error/Success message within modal -->
+    <div class="alert alert-danger mx-4 mt-3 mb-0" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="hub-tabs-container">
+      <button class="hub-tab-btn" [class.active]="hubTab === 'profile'" (click)="hubTab = 'profile'">
+        <i class="fa-solid fa-user-gear"></i>Profile Details
+      </button>
+      <button class="hub-tab-btn" [class.active]="hubTab === 'grades'" (click)="hubTab = 'grades'">
+        <i class="fa-solid fa-medal"></i>Academic Grades
+      </button>
+      <button class="hub-tab-btn" [class.active]="hubTab === 'fees'" (click)="hubTab = 'fees'">
+        <i class="fa-solid fa-wallet"></i>Fees & Payments
+      </button>
+    </div>
+
+    <!-- Scrollable Modal Body -->
+    <div class="hub-body">
+
+      <!-- TAB 1: PROFILE DETAILS -->
+      <div *ngIf="hubTab === 'profile'" class="hub-tab-panel">
+        <form (ngSubmit)="saveStudentProfile()" *ngIf="selectedStudent">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label text-muted small fw-bold uppercase">Full Name</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStudent.full_name" name="hub_fullName" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted small fw-bold uppercase">Father's Name</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStudent.father_name" name="hub_fatherName" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted small fw-bold uppercase">Phone Number</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStudent.phone" name="hub_phone" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted small fw-bold uppercase">Class / Grade</label>
+              <select class="form-select" [(ngModel)]="selectedStudent.class" name="hub_class" required>
+                <option value="11th">11th Grade</option>
+                <option value="12th">12th Grade</option>
+                <option value="B.Com 1st Year">B.Com 1st Year</option>
+                <option value="B.Com 2nd Year">B.Com 2nd Year</option>
+                <option value="B.Com 3rd Year">B.Com 3rd Year</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label text-muted small fw-bold uppercase">Subjects/Course Selected</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStudent.course" name="hub_course" placeholder="e.g. Accountancy, Economics">
+            </div>
+            <div class="col-12">
+              <div class="form-check form-switch p-3 bg-light rounded-3" style="border: 1px dashed rgba(72, 92, 215, 0.2);">
+                <input class="form-check-input ms-0 me-2" type="checkbox" role="switch" id="hubProfileComplete" [(ngModel)]="selectedStudent.profile_complete" name="hub_profileComplete">
+                <label class="form-check-label fw-bold text-dark" for="hubProfileComplete">Is Student Profile Completed?</label>
+                <div class="text-muted small">Toggling this flag lets the student bypass profile setup on login.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Actions -->
+          <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+            <button type="button" class="btn btn-outline-danger" (click)="deleteStudent()" [disabled]="isHubActionLoading">
+              <i class="fa-solid fa-trash me-2"></i>Delete Student Account
+            </button>
+            <button type="submit" class="btn btn-primary px-4" [disabled]="isHubActionLoading">
+              <span *ngIf="!isHubActionLoading"><i class="fa-solid fa-cloud-arrow-up me-2"></i>Save Changes</span>
+              <span *ngIf="isHubActionLoading"><i class="fa-solid fa-circle-notch fa-spin me-2"></i>Saving...</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- TAB 2: ACADEMIC GRADES (CRUD) -->
+      <div *ngIf="hubTab === 'grades'" class="hub-tab-panel">
+        
+        <!-- Grade Creation Box -->
+        <div class="card p-3 mb-4 bg-light border-0">
+          <h6 class="text-dark fw-bold mb-3"><i class="fa-solid fa-plus me-2 text-primary"></i>Add Grade Record</h6>
+          <div class="row g-2">
+            <div class="col-md-4">
+              <select class="form-select form-select-sm" [(ngModel)]="newMarkSubject">
+                <option value="" disabled selected>-- Subject --</option>
+                <option value="Accountancy">Accountancy</option>
+                <option value="Economics">Economics</option>
+                <option value="Business Studies">Business Studies</option>
+                <option value="Mathematics">Mathematics</option>
+              </select>
+            </div>
+            <div class="col-md-5">
+              <input type="text" class="form-control form-control-sm" placeholder="Test Name (e.g. Unit Test I, Term 1)" [(ngModel)]="newMarkTestName">
+            </div>
+            <div class="col-md-3">
+              <input type="date" class="form-control form-control-sm" [(ngModel)]="newMarkDate">
+            </div>
+            <div class="col-md-4">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white text-muted small">Max Marks</span>
+                <input type="number" class="form-control" [(ngModel)]="newMarkMax">
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white text-muted small">Obtained Marks</span>
+                <input type="number" class="form-control" [(ngModel)]="newMarkObtained">
+              </div>
+            </div>
+            <div class="col-md-3 d-grid">
+              <button class="btn btn-primary btn-sm" (click)="addTestMark()" [disabled]="isHubActionLoading">
+                <i class="fa-solid fa-plus me-1"></i>Add
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grade History List -->
+        <h6 class="text-dark fw-bold mb-2">Academic History</h6>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover text-nowrap align-middle">
+            <thead>
+              <tr class="table-light">
+                <th>Subject</th>
+                <th>Test Name</th>
+                <th>Marks</th>
+                <th>Grade</th>
+                <th>Date</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let mark of studentMarks">
+                <td class="fw-bold">{{ mark.subject }}</td>
+                <td>{{ mark.test_name }}</td>
+                <td><strong>{{ mark.obtained_marks }}</strong> / {{ mark.max_marks }} ({{ mark.percentage }}%)</td>
+                <td>
+                  <span class="badge bg-success" [class.bg-danger]="mark.grade === 'F'">{{ mark.grade }}</span>
+                </td>
+                <td>{{ mark.test_date | date:'shortDate' }}</td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-link text-danger p-0" (click)="deleteTestMark(mark.id)">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="studentMarks.length === 0">
+                <td colspan="6" class="text-center text-muted py-3 small">No test grades have been added yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 3: FEES & PAYMENTS (CRUD) -->
+      <div *ngIf="hubTab === 'fees'" class="hub-tab-panel">
+
+        <!-- Add Payment Box -->
+        <div class="card p-3 mb-4 bg-light border-0">
+          <h6 class="text-dark fw-bold mb-3"><i class="fa-solid fa-credit-card me-2 text-primary"></i>Add Manual Fee Payment</h6>
+          <div class="row g-2 align-items-center">
+            <div class="col-md-5">
+              <select class="form-select form-select-sm" [(ngModel)]="newPaymentCourse">
+                <option value="" disabled selected>-- Enrolled Subject --</option>
+                <option value="Accountancy">Accountancy</option>
+                <option value="Economics">Economics</option>
+                <option value="Business Studies">Business Studies</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Full Commerce">Full Commerce Package</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white text-muted small">Amount (₹)</span>
+                <input type="number" class="form-control" [(ngModel)]="newPaymentAmount">
+              </div>
+            </div>
+            <div class="col-md-3 d-grid">
+              <button class="btn btn-primary btn-sm" (click)="addPayment()" [disabled]="isHubActionLoading">
+                <i class="fa-solid fa-circle-check me-1"></i>Post Fee
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payments List -->
+        <h6 class="text-dark fw-bold mb-2">Payment Logs</h6>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover align-middle">
+            <thead>
+              <tr class="table-light">
+                <th>Reference/Date</th>
+                <th>Subject/Course</th>
+                <th>Amount Paid</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let pay of studentPayments">
+                <td>
+                  <div class="small fw-bold">{{ pay.id?.substring(0,8) || 'MOCK-' + pay.created_at?.substring(11,16) }}</div>
+                  <div class="text-muted small" style="font-size: 0.75rem;">{{ pay.created_at || pay.date | date:'mediumDate' }}</div>
+                </td>
+                <td>{{ pay.course }}</td>
+                <td class="text-success fw-bold">₹{{ pay.amount | number }}</td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-link text-danger p-0" (click)="deletePayment(pay.id)" *ngIf="pay.id">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                  <span class="text-muted small" *ngIf="!pay.id">Local</span>
+                </td>
+              </tr>
+              <tr *ngIf="studentPayments.length === 0">
+                <td colspan="4" class="text-center text-muted py-3 small">No fee payments have been registered yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

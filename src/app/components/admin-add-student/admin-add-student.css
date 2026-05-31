@@ -1,0 +1,122 @@
+.admin-add-student-container {
+  min-height: calc(100vh - 200px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.card-header {
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  padding: 0.75rem 1rem;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #653e8f 100%);
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+  white-space: pre-line;
+}
+
+/* Subject Checkboxes */
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.subject-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.subject-checkbox:hover {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.04);
+}
+
+.subject-checkbox.selected {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.08);
+}
+
+.checkbox-box {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #adb5bd;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.subject-checkbox.selected .checkbox-box {
+  background: #667eea;
+  border-color: #667eea;
+}
+
+.checkbox-box i {
+  color: white;
+  font-size: 0.7rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .subjects-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .subject-checkbox {
+    padding: 0.65rem 0.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-add-student-container {
+    padding: 0.5rem;
+  }
+  .card-body {
+    padding: 1rem !important;
+  }
+  .subjects-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .subject-checkbox {
+    padding: 0.6rem 0.75rem;
+  }
+}

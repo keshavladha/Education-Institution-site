@@ -1,0 +1,240 @@
+<div class="container d-flex justify-content-center align-items-center flex-grow-1" style="margin-top: 4rem; margin-bottom: 4rem;">
+  <div class="col-md-8 col-lg-6">
+    <div class="card-glass animate-fade-up">
+      <div class="card-glass-header d-flex justify-content-between align-items-center">
+        <span><i class="fa-solid fa-shield-halved me-2 text-warning"></i> SECURE GATEWAY</span>
+        <span class="badge bg-light text-primary" style="font-size: 0.75rem;">Step {{ currentStep }} of 3</span>
+      </div>
+      <div class="card-body p-4 p-md-5">
+        
+        <!-- Dynamic Alert Banner -->
+        <div *ngIf="alertMessage" class="alert animate__animated animate__fadeIn mb-4" 
+             [ngClass]="{
+               'alert-warning': alertType === 'warning',
+               'alert-success': alertType === 'success',
+               'alert-danger': alertType === 'danger'
+             }"
+             style="border-radius: 8px; font-size: 0.92rem; font-weight: 500; border: none; padding: 1rem;"
+             [style.backgroundColor]="alertType === 'warning' ? 'rgba(255, 193, 7, 0.15)' : (alertType === 'success' ? 'rgba(40, 167, 69, 0.15)' : 'rgba(220, 53, 69, 0.15)')"
+             [style.color]="alertType === 'warning' ? '#856404' : (alertType === 'success' ? '#155724' : '#721c24')">
+          <span [innerHTML]="alertMessage"></span>
+        </div>
+
+        <!-- STEP 1: Student and Course Details -->
+        <form *ngIf="currentStep === 1" [formGroup]="paymentForm" (ngSubmit)="proceedToCard()" id="paymentForm">
+
+          <!-- Student Name -->
+          <div class="form-group-custom">
+            <label for="studentName" class="form-label-custom">Student Full Name</label>
+            <div class="input-icon-container">
+              <i class="fa-solid fa-user"></i>
+              <input type="text" formControlName="studentName" id="studentName" class="form-input-custom" 
+                     [class.is-invalid]="isInvalid('studentName')" placeholder="e.g. John Doe">
+            </div>
+            <div *ngIf="isInvalid('studentName')" class="validation-error-text">Student Name is required.</div>
+          </div>
+
+          <!-- Class -->
+          <div class="form-group-custom">
+            <label for="class" class="form-label-custom">Class / Grade</label>
+            <div class="input-icon-container">
+              <i class="fa-solid fa-school"></i>
+              <select formControlName="class" id="class" class="form-input-custom form-select-custom">
+                <option value="" disabled selected>-- Select Class --</option>
+                <option value="11th">11th Grade</option>
+                <option value="12th">12th Grade</option>
+                <option value="B.Com 1st Year">B.Com 1st Year</option>
+                <option value="B.Com 2nd Year">B.Com 2nd Year</option>
+                <option value="B.Com 3rd Year">B.Com 3rd Year</option>
+              </select>
+            </div>
+            <div *ngIf="isInvalid('class')" class="validation-error-text">Class or Grade is required.</div>
+          </div>
+
+          <!-- Father's Name -->
+          <div class="form-group-custom">
+            <label for="fatherName" class="form-label-custom">Father's Name</label>
+            <div class="input-icon-container">
+              <i class="fa-solid fa-user-tie"></i>
+              <input type="text" formControlName="fatherName" id="fatherName" class="form-input-custom" 
+                     [class.is-invalid]="isInvalid('fatherName')" placeholder="Enter father's full name">
+            </div>
+            <div *ngIf="isInvalid('fatherName')" class="validation-error-text">Father's Name is required.</div>
+          </div>
+
+          <!-- Course Enrolled -->
+          <div class="form-group-custom">
+            <label for="course" class="form-label-custom">Subject / Course</label>
+            <div class="input-icon-container">
+              <i class="fa-solid fa-book-open"></i>
+              <select formControlName="course" id="course" class="form-input-custom form-select-custom">
+                <option value="" disabled selected>-- Select Subject --</option>
+                <option value="Accountancy">Accountancy</option>
+                <option value="Economics">Economics</option>
+                <option value="Business Studies">Business Studies</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Full Commerce">Full Commerce</option>
+              </select>
+            </div>
+            <div *ngIf="isInvalid('course')" class="validation-error-text">Please select your enrolled course.</div>
+          </div>
+
+          <!-- Fee Amount -->
+          <div class="form-group-custom mb-4">
+            <label for="amount" class="form-label-custom">Amount to Pay (INR ₹)</label>
+            <div class="input-icon-container">
+              <i class="fa-solid fa-indian-rupee-sign"></i>
+              <input type="number" formControlName="amount" id="amount" class="form-input-custom" 
+                     [class.is-invalid]="isInvalid('amount')" placeholder="Minimum ₹500">
+            </div>
+            <div *ngIf="isInvalid('amount')" class="validation-error-text">Fee payment amount must be at least ₹500.</div>
+          </div>
+
+          <!-- Proceed Button -->
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-accent btn-lg text-uppercase fs-6 py-3">
+              Proceed to Secure Gateway <i class="fa-solid fa-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </form>
+
+        <!-- STEP 2: Credit / Debit Card Processing -->
+        <form *ngIf="currentStep === 2" [formGroup]="cardForm" (ngSubmit)="onPaySubmit()">
+          
+          <div class="payment-summary mb-4 p-3 bg-light rounded-3" style="border: 1px solid rgba(72, 92, 215, 0.1);">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="text-muted small">Paying fees for:</span>
+              <strong class="text-dark small">{{ paymentForm.value.studentName }}</strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="text-muted small">Subject/Course:</span>
+              <strong class="text-dark small">{{ paymentForm.value.course }}</strong>
+            </div>
+            <hr class="my-2" style="border-color: rgba(72, 92, 215, 0.15);">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-muted fw-bold">TOTAL AMOUNT:</span>
+              <strong class="text-primary fs-5">₹{{ paymentForm.value.amount | number:'1.2-2' }}</strong>
+            </div>
+          </div>
+
+          <!-- Cardholder Name -->
+          <div class="form-group-custom">
+            <label for="cardName" class="form-label-custom">Cardholder Name</label>
+            <div class="input-icon-container">
+              <i class="fa-solid fa-id-card"></i>
+              <input type="text" formControlName="cardName" id="cardName" class="form-input-custom" 
+                     [class.is-invalid]="isCardInvalid('cardName')" placeholder="Name as printed on card">
+            </div>
+            <div *ngIf="isCardInvalid('cardName')" class="validation-error-text">Cardholder name is required.</div>
+          </div>
+
+          <!-- Card Number -->
+          <div class="form-group-custom">
+            <label for="cardNumber" class="form-label-custom">Card Number</label>
+            <div class="input-icon-container">
+              <i class="fa-solid fa-credit-card"></i>
+              <input type="text" formControlName="cardNumber" id="cardNumber" class="form-input-custom" 
+                     (input)="formatCardNumber($event)" [class.is-invalid]="isCardInvalid('cardNumber')" placeholder="16-Digit Card Number">
+            </div>
+            <div *ngIf="isCardInvalid('cardNumber')" class="validation-error-text">Valid 16-digit card number is required.</div>
+          </div>
+
+          <div class="row g-3">
+            <!-- Expiry -->
+            <div class="col-6">
+              <div class="form-group-custom">
+                <label for="expiry" class="form-label-custom">Expiry Date</label>
+                <div class="input-icon-container">
+                  <i class="fa-solid fa-calendar-days"></i>
+                  <input type="text" formControlName="expiry" id="expiry" class="form-input-custom" 
+                         (input)="formatExpiry($event)" [class.is-invalid]="isCardInvalid('expiry')" placeholder="MM/YY">
+                </div>
+                <div *ngIf="isCardInvalid('expiry')" class="validation-error-text">Expiry (MM/YY) is required.</div>
+              </div>
+            </div>
+
+            <!-- CVV -->
+            <div class="col-6">
+              <div class="form-group-custom">
+                <label for="cvv" class="form-label-custom">CVV Code</label>
+                <div class="input-icon-container">
+                  <i class="fa-solid fa-key"></i>
+                  <input type="password" formControlName="cvv" id="cvv" class="form-input-custom" 
+                         (input)="formatCVV($event)" [class.is-invalid]="isCardInvalid('cvv')" placeholder="3-Digits">
+                </div>
+                <div *ngIf="isCardInvalid('cvv')" class="validation-error-text">CVV is required (3 digits).</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 mt-4 align-items-center">
+            <button type="button" class="btn btn-outline-secondary py-3 px-4" (click)="backToDetails()" [disabled]="isLoading">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <button type="submit" [disabled]="isLoading || cardForm.invalid" class="btn btn-accent btn-lg text-uppercase fs-6 py-3 flex-grow-1">
+              <span *ngIf="!isLoading"><i class="fa-solid fa-lock me-1"></i> Pay Securely</span>
+              <span *ngIf="isLoading"><i class="fa-solid fa-circle-notch fa-spin me-1"></i> Authorizing payment...</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- STEP 3: Payment Success / Receipt -->
+        <div *ngIf="currentStep === 3" class="text-center payment-receipt animate__animated animate__zoomIn">
+          <div class="receipt-icon mb-4">
+            <div class="success-checkmark">
+              <div class="check-icon">
+                <span class="icon-line line-tip"></span>
+                <span class="icon-line line-long"></span>
+                <div class="icon-circle"></div>
+                <div class="icon-fix"></div>
+              </div>
+            </div>
+          </div>
+          
+          <h3 class="fw-bold text-success mb-2" style="font-family: 'Outfit', sans-serif;">Payment Successful!</h3>
+          <p class="text-muted small">Your payment has been completed and authorized securely.</p>
+
+          <div class="receipt-details my-4 p-4 border rounded-3 bg-white" style="text-align: left;">
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span class="text-muted small">Receipt No:</span>
+              <strong class="text-dark small">{{ transactionId }}</strong>
+            </div>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span class="text-muted small">Paid For:</span>
+              <strong class="text-dark small">{{ paymentForm.value.studentName }}</strong>
+            </div>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span class="text-muted small">Class:</span>
+              <strong class="text-dark small">{{ paymentForm.value.class }}</strong>
+            </div>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span class="text-muted small">Subject / Course:</span>
+              <strong class="text-dark small">{{ paymentForm.value.course }}</strong>
+            </div>
+            <div class="d-flex justify-content-between py-2">
+              <span class="text-muted fw-bold">Amount Paid:</span>
+              <strong class="text-primary fs-5">₹{{ paymentForm.value.amount | number:'1.2-2' }}</strong>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 justify-content-center">
+            <button class="btn btn-outline-custom" onclick="window.print()">
+              <i class="fa-solid fa-print me-1"></i> Print Receipt
+            </button>
+            <button class="btn btn-primary" (click)="resetAll()">
+              Make Another Payment
+            </button>
+          </div>
+        </div>
+
+        <!-- Secure Details Badge -->
+        <div *ngIf="currentStep !== 3" class="text-center text-muted mt-4" style="font-size: 0.85rem;">
+          <span class="d-inline-flex align-items-center gap-1">
+            <i class="fa-solid fa-circle-check text-success"></i> 256-Bit SSL Encrypted Connection
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

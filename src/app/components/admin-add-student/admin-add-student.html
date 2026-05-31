@@ -1,0 +1,119 @@
+<div class="admin-add-student-container">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-lg border-0">
+          <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <h4 class="mb-0"><i class="fas fa-user-plus me-2"></i>Add New Student</h4>
+              <button class="btn btn-light btn-sm" (click)="goBack()">
+                <i class="fas fa-arrow-left me-1"></i>Back to Admin
+              </button>
+            </div>
+          </div>
+          <div class="card-body p-4">
+            <p class="text-muted mb-4">
+              Create a new student account. The student will use the email and password provided here to log in.
+            </p>
+
+            <div class="alert alert-success" *ngIf="successMessage">
+              <i class="fas fa-check-circle me-2"></i>
+              <strong>Success!</strong> {{ successMessage }}
+            </div>
+
+            <div class="alert alert-danger" *ngIf="errorMessage">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              {{ errorMessage }}
+            </div>
+
+            <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Full Name *</label>
+                  <input type="text" class="form-control" formControlName="name" placeholder="Enter student's full name">
+                  <div class="text-danger small" *ngIf="studentForm.get('name')?.invalid && studentForm.get('name')?.touched">
+                    Full name is required
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Email Address *</label>
+                  <input type="email" class="form-control" formControlName="email" placeholder="student@example.com">
+                  <div class="text-danger small" *ngIf="studentForm.get('email')?.invalid && studentForm.get('email')?.touched">
+                    Valid email is required
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Password *</label>
+                  <input type="text" class="form-control" formControlName="password" placeholder="Min 6 characters">
+                  <div class="text-danger small" *ngIf="studentForm.get('password')?.invalid && studentForm.get('password')?.touched">
+                    Password must be at least 6 characters
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Father's Name *</label>
+                  <input type="text" class="form-control" formControlName="father_name" placeholder="Enter father's name">
+                  <div class="text-danger small" *ngIf="studentForm.get('father_name')?.invalid && studentForm.get('father_name')?.touched">
+                    Father's name is required
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Phone Number *</label>
+                  <input type="tel" class="form-control" formControlName="phone" placeholder="+91 9876543210">
+                  <div class="text-danger small" *ngIf="studentForm.get('phone')?.invalid && studentForm.get('phone')?.touched">
+                    Phone number is required
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Class *</label>
+                  <select class="form-select" formControlName="class">
+                    <option value="">Select Class</option>
+                    <option value="11th">11th Grade</option>
+                    <option value="12th">12th Grade</option>
+                    <option value="B.Com 1st Year">B.Com 1st Year</option>
+                    <option value="B.Com 2nd Year">B.Com 2nd Year</option>
+                    <option value="B.Com 3rd Year">B.Com 3rd Year</option>
+                  </select>
+                  <div class="text-danger small" *ngIf="studentForm.get('class')?.invalid && studentForm.get('class')?.touched">
+                    Class is required
+                  </div>
+                </div>
+
+                <!-- Subjects Selection -->
+                <div class="col-12 mb-3">
+                  <label class="form-label">Subjects * <span class="text-primary">({{ selectedCount }} selected)</span></label>
+                  <div class="subjects-grid">
+                    <div *ngFor="let subject of subjects; let i = index" 
+                         class="subject-checkbox" 
+                         [class.selected]="subject.selected"
+                         (click)="toggleSubject(i)">
+                      <div class="checkbox-box">
+                        <i class="fas fa-check" *ngIf="subject.selected"></i>
+                      </div>
+                      <span>{{ subject.name }}</span>
+                    </div>
+                  </div>
+                  <div class="text-danger small" *ngIf="errorMessage && selectedCount === 0">
+                    Please select at least one subject
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg" [disabled]="isLoading || studentForm.invalid">
+                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                  <i *ngIf="!isLoading" class="fas fa-user-plus me-2"></i>
+                  {{ isLoading ? 'Creating Account...' : 'Create Student Account' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

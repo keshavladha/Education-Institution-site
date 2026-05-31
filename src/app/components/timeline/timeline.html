@@ -1,0 +1,63 @@
+<!-- Background Glow Elements -->
+<div class="glow-orb orb-1"></div>
+<div class="glow-orb orb-2"></div>
+
+<!-- Hero Section -->
+<section class="hero-section-custom">
+  <div class="container text-center z-3">
+    <h1 class="hero-title-custom mb-3 animate-fade-up">A Decade of Academic Milestones</h1>
+    <p class="lead text-white-50 max-width-600 mx-auto mb-4 animate-fade-up" style="animation-delay: 0.1s;">
+      Trace the rich timeline of excellence, success stories, and educational leadership at Future Institute of Commerce from 2010 to 2025.
+    </p>
+    <button class="btn btn-accent px-4 py-2 text-uppercase fs-6 fw-bold animate-fade-up" style="animation-delay: 0.2s;" (click)="scrollToSection('2010')">
+      Begin Journey <i class="fas fa-chevron-down ms-2"></i>
+    </button>
+  </div>
+</section>
+
+<!-- Years Content Grid -->
+<main class="py-5">
+  
+  <!-- Decades Loops -->
+  <div *ngFor="let decade of decades">
+    <div class="timeline-decade-title" [id]="decade.id">
+      <span class="timeline-decade-text">{{ decade.title }}</span>
+    </div>
+    
+    <section *ngFor="let year of decade.years" class="year-section-custom" [id]="'section-' + year">
+      <h2 class="year-title-custom">{{ year }}</h2>
+      <div class="timeline-grid">
+        <div *ngFor="let i of [1, 2, 3]" class="timeline-card">
+          <div class="timeline-img-placeholder">
+            <i [class]="decade.iconClass"></i>
+          </div>
+          <div class="timeline-card-body">
+            <h3 class="timeline-card-title">{{ decade.cardTitle }} {{ i }}</h3>
+            <p class="timeline-card-desc">{{ decade.cardDesc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+  <!-- 2025 Vision -->
+  <div class="timeline-decade-title" [id]="futureYear.id">
+    <span class="timeline-decade-text">{{ futureYear.title }}</span>
+  </div>
+  
+  <section class="year-section-custom" [id]="'section-' + futureYear.year">
+    <h2 class="year-title-custom">{{ futureYear.year }}</h2>
+    <div class="timeline-grid">
+      <div *ngFor="let i of [1, 2, 3]" class="timeline-card">
+        <div class="timeline-img-placeholder">
+          <i [class]="futureYear.iconClass"></i>
+        </div>
+        <div class="timeline-card-body">
+          <h3 class="timeline-card-title">{{ futureYear.cardTitle }}</h3>
+          <p class="timeline-card-desc">{{ futureYear.cardDesc }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

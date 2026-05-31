@@ -1,0 +1,100 @@
+<div class="setup-container">
+  <div class="setup-card">
+
+    <!-- Header -->
+    <div class="setup-header">
+      <div class="step-badge">Step 2 of 2</div>
+      <h2>Complete Your Profile</h2>
+      <p class="subtitle">
+        Welcome, <strong>{{ student?.full_name }}</strong>! 🎉<br>
+        Tell us a bit more so we can set up your student profile.
+      </p>
+    </div>
+
+    <!-- Error Banner -->
+    <div *ngIf="errorMessage" class="error-banner">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+      <!-- Row 1: Father's Name + Phone -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fatherName">
+            <i class="fa-solid fa-user-tie me-2"></i>Father's Name
+          </label>
+          <input
+            type="text"
+            id="fatherName"
+            formControlName="fatherName"
+            placeholder="e.g. Rajesh Ladha"
+            [class.invalid]="isInvalid('fatherName')"
+          />
+          <span class="field-error" *ngIf="isInvalid('fatherName')">Father's name is required.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">
+            <i class="fa-solid fa-phone me-2"></i>Phone Number
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            formControlName="phone"
+            placeholder="e.g. 9812385797"
+            [class.invalid]="isInvalid('phone')"
+          />
+          <span class="field-error" *ngIf="isInvalid('phone')">Enter a valid 10-digit mobile number.</span>
+        </div>
+      </div>
+
+      <!-- Row 2: Class -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="studentClass">
+            <i class="fa-solid fa-school me-2"></i>Class / Grade
+          </label>
+          <select id="studentClass" formControlName="studentClass" [class.invalid]="isInvalid('studentClass')">
+            <option value="" disabled selected>-- Select Class --</option>
+            <option value="Class 11">Class 11</option>
+            <option value="Class 12">Class 12</option>
+          </select>
+          <span class="field-error" *ngIf="isInvalid('studentClass')">Please select your class.</span>
+        </div>
+      </div>
+
+      <!-- Subjects Selection -->
+      <div class="form-group subjects-section">
+        <label>
+          <i class="fa-solid fa-book-open me-2"></i>Select Subjects
+          <span class="subject-count">({{ selectedCount }} selected)</span>
+        </label>
+        <div class="subjects-grid">
+          <div *ngFor="let subject of subjects; let i = index" 
+               class="subject-checkbox" 
+               [class.selected]="subject.selected"
+               (click)="toggleSubject(i)">
+            <div class="checkbox-box">
+              <i class="fa-solid fa-check" *ngIf="subject.selected"></i>
+            </div>
+            <span class="subject-name">{{ subject.name }}</span>
+          </div>
+        </div>
+        <span class="field-error" *ngIf="errorMessage && selectedCount === 0">Please select at least one subject.</span>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="submit-btn" [disabled]="isLoading">
+        <span *ngIf="!isLoading">
+          <i class="fa-solid fa-arrow-right me-2"></i>Save & Go to Dashboard
+        </span>
+        <span *ngIf="isLoading">
+          <i class="fa-solid fa-circle-notch fa-spin me-2"></i>Saving...
+        </span>
+      </button>
+
+    </form>
+
+  </div>
+</div>
