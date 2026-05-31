@@ -1,0 +1,18 @@
+# Robots.txt file for Future Institute of Commerce
+User-agent: *
+
+# Allow search engine bots to crawl public pages
+Allow: /$
+Allow: /payment
+Allow: /year
+Allow: /login
+Allow: /admin-login
+
+# Disallow crawling of private dashboards and administrative paths
+Disallow: /dashboard
+Disallow: /profile-setup
+Disallow: /admin
+Disallow: /admin/*
+
+# Path to sitemap
+Sitemap: https://ficsirsa.vercel.app/sitemap.xml
