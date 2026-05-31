@@ -252,6 +252,17 @@ export class Admin implements OnInit {
       return;
     }
 
+    // Check if localStorage is available (might be disabled in some browsers)
+    let localStorageAvailable = false;
+    try {
+      const test = '__storage_test__';
+      localStorage.setItem(test, test);
+      localStorage.removeItem(test);
+      localStorageAvailable = true;
+    } catch (e) {
+      console.error('localStorage not available:', e);
+    }
+
     this.isHubActionLoading = true;
     try {
       const percentage = parseFloat(((this.newMarkObtained / this.newMarkMax) * 100).toFixed(1));
@@ -308,11 +319,21 @@ export class Admin implements OnInit {
         }
       }
 
-      await this.loadStudentGrades();
+      // Force reload grades with a small delay to ensure localStorage is updated
+      setTimeout(async () => {
+        await this.loadStudentGrades();
+        this.cdr.detectChanges(); // Force UI update
+      }, 100);
+      
+      // Reset form
       this.newMarkSubject = '';
       this.newMarkTestName = '';
       this.newMarkObtained = 0;
+      
+      // Show success feedback
+      alert('Grade saved successfully!');
     } catch (e: any) {
+      console.error('Failed to save grade:', e);
       alert('Failed to save grade: ' + e.message);
     } finally {
       this.isHubActionLoading = false;
