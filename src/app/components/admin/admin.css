@@ -296,3 +296,67 @@
     font-size: 0.85rem;
   }
 }
+
+/* Subject Checkboxes (Pill Style) inside Management Hub */
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.subject-checkbox-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--white);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--light-text);
+  user-select: none;
+}
+
+.subject-checkbox-pill:hover {
+  border-color: var(--primary);
+  background: rgba(0, 0, 0, 0.01);
+  color: var(--primary);
+}
+
+.subject-checkbox-pill.selected {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--white);
+  box-shadow: 0 4px 12px rgba(23, 23, 23, 0.1);
+}
+
+.checkbox-pill-box {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.subject-checkbox-pill.selected .checkbox-pill-box {
+  border-color: var(--white);
+  background: var(--white);
+}
+
+.checkbox-pill-box i {
+  color: var(--primary);
+  font-size: 0.65rem;
+}
+
+@media (max-width: 576px) {
+  .subjects-grid {
+    grid-template-columns: 1fr;
+  }
+}

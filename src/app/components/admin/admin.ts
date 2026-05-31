@@ -90,6 +90,27 @@ export class Admin implements OnInit {
       .filter(s => s.length > 0);
   }
 
+  isSubjectSelected(subject: string): boolean {
+    if (!this.selectedStudent || !this.selectedStudent.course) return false;
+    const courses = this.selectedStudent.course.split(',').map(s => s.trim());
+    return courses.includes(subject);
+  }
+
+  toggleHubSubject(subject: string) {
+    if (!this.selectedStudent) return;
+    const currentCourses = this.selectedStudent.course 
+      ? this.selectedStudent.course.split(',').map(s => s.trim()).filter(s => s.length > 0)
+      : [];
+    
+    if (currentCourses.includes(subject)) {
+      const updated = currentCourses.filter(s => s !== subject);
+      this.selectedStudent.course = updated.join(', ');
+    } else {
+      currentCourses.push(subject);
+      this.selectedStudent.course = currentCourses.join(', ');
+    }
+  }
+
   get filteredStudents(): Student[] {
     if (!this.students) return [];
     try {

@@ -174,8 +174,18 @@
               </select>
             </div>
             <div class="col-12">
-              <label class="form-label text-muted small fw-bold uppercase">Subjects/Course Selected</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedStudent.course" name="hub_course" placeholder="e.g. Accountancy, Economics">
+              <label class="form-label text-muted small fw-bold uppercase mb-2">Enrolled Subjects</label>
+              <div class="subjects-grid">
+                <div *ngFor="let subject of ['Accountancy', 'Economics', 'Business Studies', 'Mathematics']"
+                     class="subject-checkbox-pill"
+                     [class.selected]="isSubjectSelected(subject)"
+                     (click)="toggleHubSubject(subject)">
+                  <div class="checkbox-pill-box">
+                    <i class="fas fa-check" *ngIf="isSubjectSelected(subject)"></i>
+                  </div>
+                  <span>{{ subject }}</span>
+                </div>
+              </div>
             </div>
             <div class="col-12">
               <div class="form-check form-switch p-3 bg-light rounded-3" style="border: 1px dashed rgba(0, 0, 0, 0.12);">
