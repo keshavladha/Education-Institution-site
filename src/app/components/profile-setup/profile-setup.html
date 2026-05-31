@@ -57,8 +57,8 @@
           </label>
           <select id="studentClass" formControlName="studentClass" [class.invalid]="isInvalid('studentClass')">
             <option value="" disabled selected>-- Select Class --</option>
-            <option value="Class 11">Class 11</option>
-            <option value="Class 12">Class 12</option>
+            <option value="11th">11th</option>
+            <option value="12th">12th</option>
           </select>
           <span class="field-error" *ngIf="isInvalid('studentClass')">Please select your class.</span>
         </div>

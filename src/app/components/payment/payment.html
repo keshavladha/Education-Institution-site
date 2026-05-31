@@ -41,11 +41,8 @@
               <i class="fa-solid fa-school"></i>
               <select formControlName="class" id="class" class="form-input-custom form-select-custom">
                 <option value="" disabled selected>-- Select Class --</option>
-                <option value="11th">11th Grade</option>
-                <option value="12th">12th Grade</option>
-                <option value="B.Com 1st Year">B.Com 1st Year</option>
-                <option value="B.Com 2nd Year">B.Com 2nd Year</option>
-                <option value="B.Com 3rd Year">B.Com 3rd Year</option>
+                <option value="11th">11th</option>
+                <option value="12th">12th</option>
               </select>
             </div>
             <div *ngIf="isInvalid('class')" class="validation-error-text">Class or Grade is required.</div>
