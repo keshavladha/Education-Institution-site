@@ -275,6 +275,21 @@ export class Admin implements OnInit {
       else if (percentage >= 50) grade = 'D';
       else if (percentage >= 33) grade = 'E';
 
+      // Create the mark object once
+      const newMark = {
+        id: 'MOCK-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
+        student_id: this.selectedStudent.id,
+        subject: this.newMarkSubject,
+        test_name: this.newMarkTestName,
+        max_marks: this.newMarkMax,
+        obtained_marks: this.newMarkObtained,
+        percentage: percentage,
+        grade: grade,
+        test_date: this.newMarkDate,
+        created_at: new Date().toISOString()
+      };
+
+      // Try Supabase first
       try {
         const { data, error } = await this.supabase.client
           .from('test_marks')
@@ -291,49 +306,26 @@ export class Admin implements OnInit {
           .select();
 
         if (error) throw error;
+        // If Supabase succeeds, use the returned ID
+        if (data && data[0]) {
+          newMark.id = data[0].id;
+        }
       } catch (dbErr: any) {
         console.warn('⚠️ Supabase grade insert failed, using local storage fallback:', dbErr.message);
-        try {
-          const existingData = localStorage.getItem('local_test_marks');
-          console.log('📦 Existing localStorage data:', existingData);
-          const localMarks = JSON.parse(existingData || '[]');
-          const mockMark = {
-            id: 'MOCK-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
-            student_id: this.selectedStudent.id,
-            subject: this.newMarkSubject,
-            test_name: this.newMarkTestName,
-            max_marks: this.newMarkMax,
-            obtained_marks: this.newMarkObtained,
-            percentage: percentage,
-            grade: grade,
-            test_date: this.newMarkDate,
-            created_at: new Date().toISOString()
-          };
-          localMarks.push(mockMark);
-          localStorage.setItem('local_test_marks', JSON.stringify(localMarks));
-          console.log('✅ Saved to localStorage:', mockMark);
-          console.log('📊 Total marks in storage:', localMarks.length);
-        } catch (storageErr: any) {
-          console.error('💥 localStorage error:', storageErr);
-          alert('Failed to save to local storage: ' + storageErr.message);
-        }
       }
 
-      // Immediately update the local array for instant UI feedback
-      const newMark = {
-        id: 'MOCK-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
-        student_id: this.selectedStudent.id,
-        subject: this.newMarkSubject,
-        test_name: this.newMarkTestName,
-        max_marks: this.newMarkMax,
-        obtained_marks: this.newMarkObtained,
-        percentage: percentage,
-        grade: grade,
-        test_date: this.newMarkDate,
-        created_at: new Date().toISOString()
-      };
-      
-      // Add to current array immediately (no async wait needed)
+      // Always save to localStorage as backup
+      try {
+        const existingData = localStorage.getItem('local_test_marks');
+        const localMarks = JSON.parse(existingData || '[]');
+        localMarks.push(newMark); // Use the same object
+        localStorage.setItem('local_test_marks', JSON.stringify(localMarks));
+        console.log('✅ Saved to localStorage:', newMark);
+      } catch (storageErr: any) {
+        console.error('💥 localStorage error:', storageErr);
+      }
+
+      // Add to UI array (same object used everywhere)
       this.studentMarks = [newMark, ...this.studentMarks].sort((a: any, b: any) => 
         new Date(b.test_date).getTime() - new Date(a.test_date).getTime()
       );
