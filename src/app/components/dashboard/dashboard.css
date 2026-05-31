@@ -574,6 +574,10 @@
   .profile-card {
     border-radius: 14px;
   }
+  .profile-body {
+    padding: 1.25rem 1rem;
+    gap: 1rem;
+  }
   .profile-header {
     padding: 1.25rem 0.75rem;
   }

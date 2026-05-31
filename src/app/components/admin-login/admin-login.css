@@ -82,9 +82,24 @@ h2 {
   color: rgba(255, 255, 255, 0.4);
 }
 
+.input-icon-wrapper .toggle-password {
+  position: absolute;
+  right: 14px;
+  left: auto;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.2s ease, transform 0.2s ease;
+  z-index: 5;
+}
+
+.input-icon-wrapper .toggle-password:hover {
+  color: #485CD7;
+  transform: scale(1.15);
+}
+
 .input-icon-wrapper input {
   width: 100%;
-  padding: 0.8rem 1rem 0.8rem 2.8rem;
+  padding: 0.8rem 2.8rem;
   background: rgba(255, 255, 255, 0.05);
   border: 1.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
@@ -156,11 +171,182 @@ h2 {
   animation: pulse 2s infinite ease-in-out;
 }
 
-@media (max-width: 576px) {
+.back-home-link {
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.back-link {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.back-link i {
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+}
+
+.back-link:hover {
+  color: #485CD7;
+}
+
+.back-link:hover i {
+  transform: translateX(-3px);
+}
+
+/* ── Tablets (≤768px) ── */
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 1.5rem 0.75rem;
+    min-height: 75vh;
+  }
   .glass-card {
-    padding: 2rem 1.5rem;
+    padding: 2.25rem 1.75rem;
+    border-radius: 16px;
+    max-width: 420px;
+  }
+  .brand-shield {
+    font-size: 2.5rem;
   }
   h2 {
-    font-size: 1.6rem;
+    font-size: 1.65rem;
+  }
+  .subtitle {
+    font-size: 0.88rem;
+    margin-bottom: 2rem;
+  }
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  .input-icon-wrapper input {
+    padding: 0.75rem 2.5rem;
+    font-size: 0.95rem;
+  }
+  .submit-btn {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+    margin-top: 0.75rem;
+  }
+  .info-box {
+    margin-top: 1.5rem;
+    padding: 0.85rem;
+  }
+  .info-box p {
+    font-size: 0.78rem;
+  }
+}
+
+/* ── Phones (≤576px) ── */
+@media (max-width: 576px) {
+  .auth-container {
+    padding: 1rem 0.5rem;
+    min-height: 70vh;
+    align-items: flex-start;
+    padding-top: 2.5rem;
+  }
+  .glass-card {
+    padding: 1.5rem 1.15rem;
+    border-radius: 14px;
+    max-width: 100%;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+  }
+  .brand-shield {
+    font-size: 2rem;
+    margin-bottom: 0.25rem !important;
+  }
+  h2 {
+    font-size: 1.35rem;
+    margin-bottom: 0.35rem;
+  }
+  .subtitle {
+    font-size: 0.82rem;
+    margin-bottom: 1.5rem;
+  }
+  .error-banner {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+  }
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  .form-group label {
+    font-size: 0.7rem;
+    letter-spacing: 0.8px;
+    margin-bottom: 0.35rem;
+  }
+  .input-icon-wrapper i {
+    left: 12px;
+    font-size: 0.95rem;
+  }
+  .input-icon-wrapper .toggle-password {
+    right: 12px;
+    font-size: 0.95rem;
+  }
+  .input-icon-wrapper input {
+    padding: 0.7rem 2.4rem;
+    font-size: 16px; /* prevents iOS zoom on focus */
+    border-radius: 8px;
+    border-width: 1px;
+  }
+  .input-icon-wrapper input::placeholder {
+    font-size: 0.85rem;
+  }
+  .submit-btn {
+    padding: 0.75rem;
+    font-size: 0.88rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+  }
+  .back-home-link {
+    margin-top: 0.25rem !important;
+    margin-bottom: 1rem;
+  }
+  .back-link {
+    font-size: 0.78rem;
+  }
+  .info-box {
+    margin-top: 1rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: 0 8px 8px 0;
+  }
+  .info-box p {
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+}
+
+/* ── Very small phones (≤380px) ── */
+@media (max-width: 380px) {
+  .auth-container {
+    padding: 0.75rem 0.35rem;
+    padding-top: 1.5rem;
+  }
+  .glass-card {
+    padding: 1.25rem 1rem;
+  }
+  .brand-shield {
+    font-size: 1.75rem;
+  }
+  h2 {
+    font-size: 1.2rem;
+  }
+  .subtitle {
+    font-size: 0.78rem;
+    margin-bottom: 1.25rem;
+  }
+  .input-icon-wrapper input {
+    padding: 0.65rem 2.2rem;
+  }
+  .submit-btn {
+    padding: 0.65rem;
+    font-size: 0.82rem;
   }
 }

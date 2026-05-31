@@ -809,4 +809,35 @@ i.fa-regular, i.far {
     height: 32px;
     margin-right: 8px;
   }
+  /* Hero buttons stack vertically on phones */
+  .hero-content-custom .btn-accent,
+  .hero-content-custom .btn-outline-custom {
+    display: block;
+    width: 100%;
+    margin-right: 0 !important;
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+  /* Home sections: 2-col on phones already via col-6, but course cards need full width */
+  .card-glass .card-body {
+    padding: 1rem;
+  }
+  .card-glass .card-body h4 {
+    font-size: 1rem;
+  }
+  .card-glass .card-body p {
+    font-size: 0.82rem;
+  }
+  /* Course images shorter on phones */
+  .card-glass .card-img-top {
+    height: 140px !important;
+  }
+  /* Faculty images shorter on phones */
+  .card-glass img.card-img-top[alt] {
+    height: 180px !important;
+  }
+  /* Contact form adjustments */
+  .card-glass.p-4 {
+    padding: 1rem !important;
+  }
 }

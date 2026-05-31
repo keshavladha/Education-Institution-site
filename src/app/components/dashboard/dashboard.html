@@ -246,12 +246,12 @@
             </thead>
             <tbody>
               <tr *ngFor="let p of payments; let i = index">
-                <td class="row-num">{{ i + 1 }}</td>
-                <td>{{ p.created_at | date:'dd MMM yyyy' }}</td>
-                <td class="fw-bold">{{ p.course }}</td>
-                <td>{{ p.class }}</td>
-                <td class="amount-cell">₹{{ p.amount | number }}</td>
-                <td>
+                <td class="row-num" data-label="S.No">{{ i + 1 }}</td>
+                <td data-label="Date">{{ p.created_at | date:'dd MMM yyyy' }}</td>
+                <td class="fw-bold" data-label="Course">{{ p.course }}</td>
+                <td data-label="Class">{{ p.class }}</td>
+                <td class="amount-cell" data-label="Amount">₹{{ p.amount | number }}</td>
+                <td data-label="Status">
                   <span class="status-badge complete">
                     <i class="fa-solid fa-check me-1"></i>Completed
                   </span>

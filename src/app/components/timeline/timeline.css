@@ -51,3 +51,44 @@
 
 .orb-1 { top: 15%; left: 5%; }
 .orb-2 { bottom: 20%; right: 5%; }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .hero-section-custom {
+    height: 45vh;
+  }
+  .hero-title-custom {
+    font-size: 2.25rem;
+  }
+  .year-section-custom {
+    padding: 2.5rem 0;
+  }
+  .year-title-custom {
+    font-size: 2.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .glow-orb {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section-custom {
+    height: 35vh;
+  }
+  .hero-title-custom {
+    font-size: 1.75rem;
+  }
+  .year-section-custom {
+    padding: 1.5rem 0;
+  }
+  .year-title-custom {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .glow-orb {
+    width: 150px;
+    height: 150px;
+  }
+}

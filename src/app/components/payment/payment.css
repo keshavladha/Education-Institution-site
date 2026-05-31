@@ -125,3 +125,57 @@
   }
 }
 
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .card-glass-header {
+    font-size: 1rem;
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  .card-body {
+    padding: 1.5rem !important;
+  }
+  .payment-summary {
+    font-size: 0.85rem;
+  }
+  .receipt-details {
+    padding: 1rem !important;
+  }
+  .receipt-details .d-flex {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .card-body {
+    padding: 1rem !important;
+  }
+  .card-glass-header {
+    font-size: 0.9rem;
+    padding: 0.85rem;
+  }
+  .card-glass-header .badge {
+    font-size: 0.65rem !important;
+  }
+  .form-label-custom {
+    font-size: 0.85rem;
+  }
+  .form-input-custom {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.9rem;
+  }
+  .input-icon-container .form-input-custom {
+    padding-left: 2.5rem;
+  }
+  .receipt-details {
+    padding: 0.75rem !important;
+  }
+  .d-flex.gap-3.justify-content-center {
+    flex-direction: column;
+  }
+  .d-flex.gap-3.justify-content-center .btn {
+    width: 100%;
+  }
+}

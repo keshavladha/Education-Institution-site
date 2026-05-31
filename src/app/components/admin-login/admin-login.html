@@ -23,7 +23,8 @@
         <label for="admin_password">Security Password</label>
         <div class="input-icon-wrapper">
           <i class="fa-solid fa-lock text-muted"></i>
-          <input type="password" id="admin_password" formControlName="password" placeholder="••••••••" />
+          <input [type]="showPassword ? 'text' : 'password'" id="admin_password" formControlName="password" placeholder="••••••••" />
+          <i class="fa-solid toggle-password" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword" (click)="togglePasswordVisibility()"></i>
         </div>
       </div>
 
@@ -32,6 +33,12 @@
         <span *ngIf="isLoading"><i class="fa-solid fa-circle-notch fa-spin me-1"></i> Authorizing...</span>
       </button>
     </form>
+
+    <div class="back-home-link text-center mt-4">
+      <a routerLink="/" class="back-link">
+        <i class="fa-solid fa-arrow-left me-1"></i> Back to Website Homepage
+      </a>
+    </div>
 
     <div class="info-box">
       <p>This is a protected administrative route. All unauthorized connection attempts are logged.</p>

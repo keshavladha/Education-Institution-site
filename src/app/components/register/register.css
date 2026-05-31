@@ -158,3 +158,33 @@ input:focus {
   color: hsl(28, 95%, 52%);
   text-decoration: underline;
 }
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  .auth-container {
+    padding: 1.5rem 0.75rem;
+    min-height: 70vh;
+  }
+  .glass-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  .subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  input {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.9rem;
+  }
+  .submit-btn {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}

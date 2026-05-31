@@ -25,6 +25,11 @@ export class AdminLogin {
 
   errorMessage: string = '';
   isLoading: boolean = false;
+  showPassword: boolean = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
   async onSubmit() {
     if (this.loginForm.invalid) return;

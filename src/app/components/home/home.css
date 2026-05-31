@@ -2,3 +2,48 @@
 .carousel-item {
   height: 85vh;
 }
+
+/* Institute Stats Section */
+.institute-stats-section {
+  padding: 3rem 0;
+}
+
+.stat-number-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.stat-label-text {
+  font-size: 0.95rem;
+}
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .carousel-item {
+    height: 55vh;
+  }
+  .institute-stats-section {
+    padding: 2rem 0;
+  }
+  .stat-number-value {
+    font-size: 1.75rem;
+  }
+  .stat-label-text {
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-item {
+    height: 45vh;
+  }
+  .institute-stats-section {
+    padding: 1.5rem 0;
+  }
+  .stat-number-value {
+    font-size: 1.5rem;
+  }
+  .stat-label-text {
+    font-size: 0.78rem;
+  }
+}
