@@ -319,16 +319,32 @@ export class Admin implements OnInit {
         }
       }
 
-      // Force reload grades with a small delay to ensure localStorage is updated
-      setTimeout(async () => {
-        await this.loadStudentGrades();
-        this.cdr.detectChanges(); // Force UI update
-      }, 100);
+      // Immediately update the local array for instant UI feedback
+      const newMark = {
+        id: 'MOCK-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
+        student_id: this.selectedStudent.id,
+        subject: this.newMarkSubject,
+        test_name: this.newMarkTestName,
+        max_marks: this.newMarkMax,
+        obtained_marks: this.newMarkObtained,
+        percentage: percentage,
+        grade: grade,
+        test_date: this.newMarkDate,
+        created_at: new Date().toISOString()
+      };
+      
+      // Add to current array immediately (no async wait needed)
+      this.studentMarks = [newMark, ...this.studentMarks].sort((a: any, b: any) => 
+        new Date(b.test_date).getTime() - new Date(a.test_date).getTime()
+      );
       
       // Reset form
       this.newMarkSubject = '';
       this.newMarkTestName = '';
       this.newMarkObtained = 0;
+      
+      // Force immediate UI update
+      this.cdr.detectChanges();
       
       // Show success feedback
       alert('Grade saved successfully!');
@@ -343,11 +359,17 @@ export class Admin implements OnInit {
   async deleteTestMark(markId: string) {
     if (!confirm('Delete this test grade record?')) return;
     try {
+      // Immediately update UI - remove from local array first
+      this.studentMarks = this.studentMarks.filter((m: any) => m.id !== markId);
+      this.cdr.detectChanges(); // Force immediate UI update
+      
+      // Then handle storage deletion
       if (markId.startsWith('MOCK-')) {
         // Delete from local storage
         const localMarks = JSON.parse(localStorage.getItem('local_test_marks') || '[]');
         const updated = localMarks.filter((m: any) => m.id !== markId);
         localStorage.setItem('local_test_marks', JSON.stringify(updated));
+        console.log('✅ Deleted from localStorage:', markId);
       } else {
         const { error } = await this.supabase.client
           .from('test_marks')
@@ -355,9 +377,12 @@ export class Admin implements OnInit {
           .eq('id', markId);
         if (error) throw error;
       }
-      await this.loadStudentGrades();
     } catch (e: any) {
+      console.error('Failed to delete grade:', e);
       alert('Failed to delete grade: ' + e.message);
+      // Reload on error to restore correct state
+      await this.loadStudentGrades();
+      this.cdr.detectChanges();
     }
   }
 
