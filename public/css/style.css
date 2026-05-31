@@ -6,42 +6,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400&display=swap');
 
 :root {
-  /* Color Palette (Tailored HSL Tokens) */
-  --primary-base: 220; /* Indigo Blue */
-  --primary: hsl(var(--primary-base), 85%, 25%);
-  --primary-light: hsl(var(--primary-base), 80%, 45%);
-  --primary-dark: hsl(var(--primary-base), 95%, 12%);
+  /* Color Palette - Premium Minimalist & Alabaster Warmth */
+  --primary: #171717;
+  --primary-light: #404040;
+  --primary-dark: #0a0a0a;
   
-  --secondary-base: 230; /* Electric Navy */
-  --secondary: hsl(var(--secondary-base), 65%, 15%);
+  --secondary: #FAF8F6;
   
-  --accent-base: 28; /* Vibrant Amber / Gold */
-  --accent: hsl(var(--accent-base), 95%, 52%);
-  --accent-hover: hsl(var(--accent-base), 100%, 45%);
-  --accent-soft: hsla(var(--accent-base), 95%, 52%, 0.15);
+  --accent: #171717;
+  --accent-hover: #404040;
+  --accent-soft: rgba(23, 23, 23, 0.04);
   
-  --success-base: 145; /* Emerald Green */
-  --success: hsl(var(--success-base), 63%, 42%);
+  --success: #10B981;
   
   /* Neutral Color Tokens */
-  --light-bg: #f9fbfd;
+  --light-bg: #FAF8F6;
   --white: #ffffff;
-  --dark-text: hsl(220, 25%, 15%);
-  --light-text: hsl(220, 15%, 45%);
-  --border-color: hsla(220, 20%, 85%, 0.6);
+  --dark-text: #171717;
+  --light-text: #525252;
+  --border-color: rgba(0, 0, 0, 0.08);
   
+  /* Delicate Pastel Accent Tokens (from reference image) */
+  --pastel-lavender: #F5F3FF;
+  --pastel-mint: #ECFDF5;
+  --pastel-blue: #EFF6FF;
+  --pastel-peach: #FFF7ED;
+  --pastel-lavender-border: rgba(139, 92, 246, 0.15);
+  --pastel-mint-border: rgba(16, 185, 129, 0.15);
+  --pastel-blue-border: rgba(59, 130, 246, 0.15);
+  --pastel-peach-border: rgba(245, 158, 11, 0.15);
+
   /* Glassmorphism Configuration */
-  --glass-bg: rgba(255, 255, 255, 0.75);
-  --glass-border: rgba(255, 255, 255, 0.4);
-  --glass-shadow: 0 12px 40px 0 rgba(13, 71, 161, 0.08);
-  --glass-blur: 16px;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.04);
+  --glass-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.02);
+  --glass-blur: 20px;
   
-  /* Global Constants */
-  --font-sans: 'Outfit', sans-serif;
-  --font-serif: 'Playfair Display', serif;
+  /* Global Constants - Premium Font Stack */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Poppins', 'Inter', sans-serif;
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
+  --radius-pill: 50px;
   --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: all 0.2s ease;
 }

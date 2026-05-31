@@ -39,6 +39,7 @@ export class Admin implements OnInit {
   newMarkTestName = '';
   newMarkMax = 100;
   newMarkObtained = 0;
+  isAbsent = false;
   newMarkDate = new Date().toISOString().substring(0, 10);
 
   // Form states for adding payment
@@ -163,7 +164,21 @@ export class Admin implements OnInit {
       const filteredLocal = localMarks.filter((m: any) => m.student_id === this.selectedStudent?.id);
       console.log('🔍 Filtered local marks for this student:', filteredLocal.length);
       
-      this.studentMarks = [...filteredLocal, ...(data || [])].sort((a: any, b: any) => 
+      const merged = [...filteredLocal, ...(data || [])];
+      const uniqueMarksMap = new Map();
+      merged.forEach((item: any) => {
+        const key = `${item.student_id}_${item.subject}_${item.test_name}_${item.test_date}`;
+        if (uniqueMarksMap.has(key)) {
+          const existing = uniqueMarksMap.get(key);
+          if (existing.id.startsWith('MOCK-') && !item.id.startsWith('MOCK-')) {
+            uniqueMarksMap.set(key, item);
+          }
+        } else {
+          uniqueMarksMap.set(key, item);
+        }
+      });
+
+      this.studentMarks = Array.from(uniqueMarksMap.values()).sort((a: any, b: any) => 
         new Date(b.test_date).getTime() - new Date(a.test_date).getTime()
       );
       console.log('✅ Final studentMarks array:', this.studentMarks);
@@ -172,8 +187,17 @@ export class Admin implements OnInit {
       const localData = localStorage.getItem('local_test_marks');
       const localMarks = JSON.parse(localData || '[]');
       console.log('📦 Fallback - localStorage data:', localData, 'parsed:', localMarks);
-      this.studentMarks = localMarks.filter((m: any) => m.student_id === this.selectedStudent?.id)
-        .sort((a: any, b: any) => new Date(b.test_date).getTime() - new Date(a.test_date).getTime());
+      
+      const filteredLocal = localMarks.filter((m: any) => m.student_id === this.selectedStudent?.id);
+      const uniqueMarksMap = new Map();
+      filteredLocal.forEach((item: any) => {
+        const key = `${item.student_id}_${item.subject}_${item.test_name}_${item.test_date}`;
+        uniqueMarksMap.set(key, item);
+      });
+
+      this.studentMarks = Array.from(uniqueMarksMap.values()).sort((a: any, b: any) => 
+        new Date(b.test_date).getTime() - new Date(a.test_date).getTime()
+      );
       console.log('📊 Fallback - filtered marks:', this.studentMarks);
     }
   }
@@ -247,7 +271,8 @@ export class Admin implements OnInit {
 
   async addTestMark() {
     if (!this.selectedStudent) return;
-    if (!this.newMarkSubject || !this.newMarkTestName || this.newMarkMax <= 0 || this.newMarkObtained < 0) {
+    if (this.isHubActionLoading) return; // Prevent double-submit
+    if (!this.newMarkSubject || !this.newMarkTestName || this.newMarkMax <= 0 || (!this.isAbsent && this.newMarkObtained < 0)) {
       alert('Please fill out all grade fields correctly.');
       return;
     }
@@ -265,15 +290,22 @@ export class Admin implements OnInit {
 
     this.isHubActionLoading = true;
     try {
-      const percentage = parseFloat(((this.newMarkObtained / this.newMarkMax) * 100).toFixed(1));
+      let obtained = this.isAbsent ? 0 : this.newMarkObtained;
+      let percentage = parseFloat(((obtained / this.newMarkMax) * 100).toFixed(1));
       
       let grade = 'F';
-      if (percentage >= 90) grade = 'A+';
-      else if (percentage >= 80) grade = 'A';
-      else if (percentage >= 70) grade = 'B';
-      else if (percentage >= 60) grade = 'C';
-      else if (percentage >= 50) grade = 'D';
-      else if (percentage >= 33) grade = 'E';
+      if (this.isAbsent) {
+        grade = 'AB';
+        percentage = 0;
+        obtained = 0;
+      } else {
+        if (percentage >= 90) grade = 'A+';
+        else if (percentage >= 80) grade = 'A';
+        else if (percentage >= 70) grade = 'B';
+        else if (percentage >= 60) grade = 'C';
+        else if (percentage >= 50) grade = 'D';
+        else if (percentage >= 33) grade = 'E';
+      }
 
       // Create the mark object once
       const newMark = {
@@ -282,7 +314,7 @@ export class Admin implements OnInit {
         subject: this.newMarkSubject,
         test_name: this.newMarkTestName,
         max_marks: this.newMarkMax,
-        obtained_marks: this.newMarkObtained,
+        obtained_marks: obtained,
         percentage: percentage,
         grade: grade,
         test_date: this.newMarkDate,
@@ -298,7 +330,7 @@ export class Admin implements OnInit {
             subject: this.newMarkSubject,
             test_name: this.newMarkTestName,
             max_marks: this.newMarkMax,
-            obtained_marks: this.newMarkObtained,
+            obtained_marks: obtained,
             percentage: percentage,
             grade: grade,
             test_date: this.newMarkDate
@@ -334,6 +366,7 @@ export class Admin implements OnInit {
       this.newMarkSubject = '';
       this.newMarkTestName = '';
       this.newMarkObtained = 0;
+      this.isAbsent = false;
       
       // Force immediate UI update
       this.cdr.detectChanges();

@@ -5,39 +5,48 @@
       <img src="/logo.png" alt="Future Institute of Commerce Logo" onerror="this.style.display='none'">
       <span>Future Institute of Commerce</span>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Mobile Quick Auth Action (Visible straight at first on mobile viewports) -->
+    <div class="d-lg-none ms-auto me-2">
+      <a class="btn btn-accent px-3 py-1.5" style="font-size: 0.8rem; border-radius: var(--radius-pill);" *ngIf="!isLoggedIn" routerLink="/login">Student Login</a>
+      <a class="btn btn-outline-custom px-3 py-1.5" style="font-size: 0.8rem; border-radius: var(--radius-pill);" *ngIf="isLoggedIn && !isAdmin" routerLink="/dashboard">Dashboard</a>
+    </div>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto align-items-center">
-        <li class="nav-item"><a class="nav-link-custom" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
-        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="about">About</a></li>
-        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="courses">Courses</a></li>
-        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="faculty">Faculty</a></li>
-        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="testimonials">Testimonials</a></li>
-        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="contact">Contact</a></li>
-        
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: true}" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Home</a></li>
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="about" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">About</a></li>
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="courses" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Courses</a></li>
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="faculty" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Faculty</a></li>
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="testimonials" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Testimonials</a></li>
+        <li class="nav-item"><a class="nav-link-custom" routerLink="/" fragment="contact" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Contact</a></li>
+
         <!-- Auth Links - Dashboard only for students, not admins -->
         <li class="nav-item" *ngIf="isLoggedIn && !isAdmin">
-          <a class="nav-link-custom" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+          <a class="nav-link-custom" routerLink="/dashboard" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Dashboard</a>
         </li>
         <li class="nav-item" *ngIf="isAdmin">
-          <a class="nav-link-custom text-warning fw-bold" routerLink="/admin" routerLinkActive="active">Admin</a>
+          <a class="nav-link-custom text-warning fw-bold" routerLink="/admin" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Admin</a>
         </li>
         <li class="nav-item" *ngIf="!isLoggedIn">
-          <a class="nav-link-custom fw-bold" routerLink="/login">Login</a>
+          <a class="nav-link-custom fw-bold" routerLink="/login" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Login</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn">
-          <a class="nav-link-custom fw-bold text-danger" (click)="logout()" style="cursor: pointer;">Logout</a>
+          <a class="nav-link-custom fw-bold text-danger" (click)="logout()" style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Logout</a>
         </li>
 
         <li class="nav-item nav-cta">
-          <a class="btn btn-accent" routerLink="/payment" routerLinkActive="active">
+          <a class="btn btn-accent" routerLink="/payment" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
             <i class="fa-solid fa-credit-card"></i> Pay Fees
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link-custom nav-icon" routerLink="/year" routerLinkActive="active" title="Institute Memories Timeline">
+          <a class="nav-link-custom nav-icon" routerLink="/year" routerLinkActive="active"
+            title="Institute Memories Timeline" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
             <i class="fa-solid fa-images"></i>
           </a>
         </li>
@@ -53,11 +62,12 @@
 <footer class="footer-custom">
   <div class="container">
     <div class="row g-4">
-      
+
       <div class="col-lg-4">
         <h4 class="footer-title-custom">Future Institute of Commerce</h4>
-        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.8;">
-          Empowering students with comprehensive commerce knowledge and capabilities since 2005. Our deep commitment lies in academic greatness and shaping professional pathways.
+        <p class="text-muted" style="font-size: 0.95rem; line-height: 1.8;">
+          Empowering students with comprehensive commerce knowledge and capabilities since 2005. Our deep commitment
+          lies in academic greatness and shaping professional pathways.
         </p>
         <div class="mt-4">
           <a href="#" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
@@ -76,7 +86,8 @@
           <li><a routerLink="/" fragment="faculty">Faculty</a></li>
           <li><a routerLink="/" fragment="testimonials">Testimonials</a></li>
           <li><a routerLink="/" fragment="contact">Contact</a></li>
-          <li class="mt-2 pt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important;"><a routerLink="/admin-login"><i class="fa-solid fa-lock me-1"></i> Admin Portal</a></li>
+          <li class="mt-2 pt-2 border-top" style="border-color: rgba(0, 0, 0, 0.08) !important;"><a
+              routerLink="/admin-login"><i class="fa-solid fa-lock me-1"></i> Admin Portal</a></li>
         </ul>
       </div>
 
@@ -93,22 +104,23 @@
 
       <div class="col-lg-3">
         <h4 class="footer-title-custom">Contact Info</h4>
-        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem;" class="mb-2">
-          <i class="fas fa-map-marker-alt text-warning me-2"></i> 123 Education Street, Academic District, City - 100001
+        <p class="text-muted" style="font-size: 0.95rem;" class="mb-2">
+          <i class="fas fa-map-marker-alt text-dark me-2"></i>OPP. GOVT. MODEL SCHOOL, NEHRU PARK
+          STREET, 1ST FLOOR OF GRAMIN BANK, SIRSA
         </p>
-        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem;" class="mb-2">
-          <i class="fas fa-phone-alt text-warning me-2"></i> +91 9876543210
+        <p class="text-muted" style="font-size: 0.95rem;" class="mb-2">
+          <i class="fas fa-phone-alt text-dark me-2"></i> +91 9812385797
         </p>
-        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem;" class="mb-2">
-          <i class="fas fa-envelope text-warning me-2"></i> info@futureinstitute.edu
+        <p class="text-muted" style="font-size: 0.95rem;" class="mb-2">
+          <i class="fas fa-envelope text-dark me-2"></i> info@futureinstitute.edu
         </p>
-        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem;">
-          <i class="fas fa-clock text-warning me-2"></i> Mon-Sat: 9:00 AM - 6:00 PM
+        <p class="text-muted" style="font-size: 0.95rem;">
+          <i class="fas fa-clock text-dark me-2"></i> Mon-Sat: 9:00 AM - 6:00 PM
         </p>
       </div>
 
     </div>
-    
+
     <div class="footer-copyright">
       <p>© 2025 Future Institute of Commerce. All rights reserved.</p>
     </div>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService, Student } from '../../services/supabase.service';
 import { RouterLink } from '@angular/router';
@@ -21,6 +21,15 @@ export interface FeeSummary {
   due: number;
 }
 
+export interface Announcement {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  tag: string;
+  tagClass: 'exam' | 'resources' | 'event';
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -30,6 +39,7 @@ export interface FeeSummary {
 })
 export class Dashboard implements OnInit {
   private supabase = inject(SupabaseService);
+  private cdr = inject(ChangeDetectorRef);
 
   student: Student | null = null;
   payments: any[] = [];
@@ -38,9 +48,88 @@ export class Dashboard implements OnInit {
   // Tab state
   activeTab: 'marks' | 'fees' = 'marks';
 
+  // Live Announcements
+  announcements: Announcement[] = [
+    {
+      id: '1',
+      title: 'CBSE Class 12 Accountancy Mock Test',
+      description: 'Full-syllabus mock test scheduled for this Sunday. Attendance is mandatory for performance benchmarking.',
+      date: '02 Jun 2026',
+      tag: 'Exam',
+      tagClass: 'exam'
+    },
+    {
+      id: '2',
+      title: 'Economics Revision Notes Uploaded',
+      description: 'Chapter 3 detailed revision notes and graphical analysis cheatsheets have been uploaded under resources.',
+      date: '30 May 2026',
+      tag: 'Resources',
+      tagClass: 'resources'
+    },
+    {
+      id: '3',
+      title: 'CA Career Guest Lecture',
+      description: 'Interactive career guidance webinar by CA Vikram Patel scheduled next Friday at 4:00 PM.',
+      date: '28 May 2026',
+      tag: 'Event',
+      tagClass: 'event'
+    }
+  ];
+
   // Test marks
   marks: TestMark[] = [];
   isLoadingMarks = false;
+
+  // Interactive Grade Chart State
+  selectedSubject = 'All';
+  hoveredMark: TestMark | null = null;
+  hoveredMarkIndex: number | null = null;
+
+  get subjects(): string[] {
+    const subs = this.marks.map(m => m.subject);
+    return ['All', ...Array.from(new Set(subs))];
+  }
+
+  get filteredMarks(): TestMark[] {
+    if (this.selectedSubject === 'All') {
+      return this.marks;
+    }
+    return this.marks.filter(m => m.subject === this.selectedSubject);
+  }
+
+  get chronologicalMarks(): TestMark[] {
+    return [...this.filteredMarks].sort((a, b) => 
+      new Date(a.test_date).getTime() - new Date(b.test_date).getTime()
+    );
+  }
+
+  get svgPoints(): string {
+    const pts = this.chronologicalMarks;
+    if (pts.length === 0) return '';
+    return pts.map((m, i) => {
+      const x = 45 + (pts.length > 1 ? (i / (pts.length - 1)) * 415 : 207.5);
+      const y = 120 - (m.percentage / 100) * 90;
+      return `${x},${y}`;
+    }).join(' ');
+  }
+
+  get svgAreaPoints(): string {
+    const pts = this.chronologicalMarks;
+    if (pts.length === 0) return '';
+    const pointsStr = this.svgPoints;
+    const startX = 45;
+    const endX = 45 + (pts.length > 1 ? (pts.length - 1) * (415 / (pts.length - 1)) : 207.5);
+    return `${startX},130 ${pointsStr} ${endX},130`;
+  }
+
+  get chartDots() {
+    const pts = this.chronologicalMarks;
+    return pts.map((m, i) => {
+      const x = 45 + (pts.length > 1 ? (i / (pts.length - 1)) * 415 : 207.5);
+      const y = 120 - (m.percentage / 100) * 90;
+      return { x, y, mark: m, index: i };
+    });
+  }
 
   // Fee summary
   feeSummary: FeeSummary = {
@@ -49,22 +138,24 @@ export class Dashboard implements OnInit {
     due: 25000
   };
 
-  async ngOnInit() {
-    this.student = this.supabase.student;
-
-    if (this.student?.full_name) {
-      try {
-        this.payments = await this.supabase.getPaymentsForStudent(this.student.full_name);
-        this.calculateFeeSummary();
-      } catch (e) {
-        console.error('Error fetching payments', e);
+  ngOnInit() {
+    this.supabase.student$.subscribe(async student => {
+      this.student = student;
+      if (student) {
+        this.isLoading = true;
+        if (student.full_name) {
+          try {
+            this.payments = await this.supabase.getPaymentsForStudent(student.full_name);
+            this.calculateFeeSummary();
+          } catch (e) {
+            console.error('Error fetching payments', e);
+          }
+        }
+        await this.loadMarks();
+        this.isLoading = false;
+        this.cdr.detectChanges(); // Force UI update on async load
       }
-    }
-
-    // Load test marks
-    await this.loadMarks();
-
-    this.isLoading = false;
+    });
   }
 
   async loadMarks() {
@@ -87,7 +178,21 @@ export class Dashboard implements OnInit {
     const localMarks = JSON.parse(localStorage.getItem('local_test_marks') || '[]');
     const filteredLocal = localMarks.filter((m: any) => m.student_id === this.student?.id);
 
-    this.marks = [...filteredLocal, ...dbMarks].sort((a: any, b: any) => 
+    const merged = [...filteredLocal, ...dbMarks];
+    const uniqueMarksMap = new Map();
+    merged.forEach((item: any) => {
+      const key = `${item.student_id}_${item.subject}_${item.test_name}_${item.test_date}`;
+      if (uniqueMarksMap.has(key)) {
+        const existing = uniqueMarksMap.get(key);
+        if (existing.id.startsWith('MOCK-') && !item.id.startsWith('MOCK-')) {
+          uniqueMarksMap.set(key, item);
+        }
+      } else {
+        uniqueMarksMap.set(key, item);
+      }
+    });
+
+    this.marks = Array.from(uniqueMarksMap.values()).sort((a: any, b: any) => 
       new Date(b.test_date).getTime() - new Date(a.test_date).getTime()
     );
     this.isLoadingMarks = false;

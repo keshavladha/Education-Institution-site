@@ -2,7 +2,7 @@
   <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1 class="admin-title">Admin Dashboard</h1>
-      <button class="btn btn-primary" (click)="navigateToAddStudent()">
+      <button class="btn btn-accent px-4 py-2" (click)="navigateToAddStudent()">
         <i class="fas fa-plus me-2"></i>Add New Student
       </button>
     </div>
@@ -58,7 +58,7 @@
     <div class="card admin-card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Student Management</h5>
-        <span class="badge bg-white text-primary" *ngIf="!isLoading">{{ filteredStudents.length }} found</span>
+        <span class="badge bg-white text-dark" *ngIf="!isLoading">{{ filteredStudents.length }} found</span>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -75,26 +75,31 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngIf="isLoading">
-                <td colspan="7" class="text-center py-4">
-                  <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                </td>
-              </tr>
+              <!-- Table shimmer row placeholders -->
+              <ng-container *ngIf="isLoading">
+                <tr *ngFor="let item of [1, 2, 3]">
+                  <td><span class="shimmer-placeholder shimmer-line w-75" style="height: 14px;"></span></td>
+                  <td><span class="shimmer-placeholder shimmer-line w-50" style="height: 14px;"></span></td>
+                  <td><span class="shimmer-placeholder shimmer-line w-50" style="height: 14px;"></span></td>
+                  <td><span class="shimmer-placeholder shimmer-line w-75" style="height: 14px;"></span></td>
+                  <td><span class="shimmer-placeholder shimmer-line w-25" style="height: 18px; border-radius: 50px;"></span></td>
+                  <td><span class="shimmer-placeholder shimmer-line w-50" style="height: 14px;"></span></td>
+                  <td class="text-end"><span class="shimmer-placeholder shimmer-line w-50" style="height: 18px; border-radius: 50px;"></span></td>
+                </tr>
+              </ng-container>
               <tr *ngFor="let student of filteredStudents">
                 <td data-label="Name" class="fw-bold">{{ student.full_name }}</td>
                 <td data-label="Email">{{ student.email }}</td>
                 <td data-label="Class">{{ student.class || 'N/A' }}</td>
                 <td data-label="Course">{{ student.course || 'N/A' }}</td>
                 <td data-label="Profile">
-                  <span class="badge" [class.bg-success]="student.profile_complete" [class.bg-warning]="!student.profile_complete">
+                  <span class="badge" [class.bg-success]="student.profile_complete" [class.bg-danger]="!student.profile_complete">
                     {{ student.profile_complete ? 'Yes' : 'No' }}
                   </span>
                 </td>
                 <td data-label="Created">{{ student.created_at | date:'mediumDate' }}</td>
                 <td data-label="Actions" class="text-end">
-                  <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="openManageHub(student)">
+                  <button class="btn btn-sm btn-outline-custom px-3 py-1.5" (click)="openManageHub(student)">
                     <i class="fa-solid fa-sliders me-1"></i>Manage
                   </button>
                 </td>
@@ -118,7 +123,7 @@
     <!-- Header -->
     <div class="hub-header d-flex justify-content-between align-items-start">
       <div>
-        <span class="badge bg-accent-soft text-primary px-2 py-1 mb-2">MANAGEMENT HUB</span>
+        <span class="badge bg-accent-soft text-dark px-2 py-1 mb-2">MANAGEMENT HUB</span>
         <h3 class="hub-title mb-1">{{ selectedStudent?.full_name }}</h3>
         <p class="text-muted small mb-0"><i class="fa-solid fa-envelope me-1"></i>{{ selectedStudent?.email }}</p>
       </div>
@@ -179,7 +184,7 @@
               <input type="text" class="form-control" [(ngModel)]="selectedStudent.course" name="hub_course" placeholder="e.g. Accountancy, Economics">
             </div>
             <div class="col-12">
-              <div class="form-check form-switch p-3 bg-light rounded-3" style="border: 1px dashed rgba(72, 92, 215, 0.2);">
+              <div class="form-check form-switch p-3 bg-light rounded-3" style="border: 1px dashed rgba(0, 0, 0, 0.12);">
                 <input class="form-check-input ms-0 me-2" type="checkbox" role="switch" id="hubProfileComplete" [(ngModel)]="selectedStudent.profile_complete" name="hub_profileComplete">
                 <label class="form-check-label fw-bold text-dark" for="hubProfileComplete">Is Student Profile Completed?</label>
                 <div class="text-muted small">Toggling this flag lets the student bypass profile setup on login.</div>
@@ -188,11 +193,11 @@
           </div>
 
           <!-- Bottom Actions -->
-          <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-            <button type="button" class="btn btn-outline-danger" (click)="deleteStudent()" [disabled]="isHubActionLoading">
+          <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top" style="border-color: rgba(0, 0, 0, 0.05) !important;">
+            <button type="button" class="btn btn-outline-danger px-4 rounded-pill" (click)="deleteStudent()" [disabled]="isHubActionLoading">
               <i class="fa-solid fa-trash me-2"></i>Delete Student Account
             </button>
-            <button type="submit" class="btn btn-primary px-4" [disabled]="isHubActionLoading">
+            <button type="submit" class="btn btn-accent px-4" [disabled]="isHubActionLoading">
               <span *ngIf="!isHubActionLoading"><i class="fa-solid fa-cloud-arrow-up me-2"></i>Save Changes</span>
               <span *ngIf="isHubActionLoading"><i class="fa-solid fa-circle-notch fa-spin me-2"></i>Saving...</span>
             </button>
@@ -205,7 +210,7 @@
         
         <!-- Grade Creation Box -->
         <div class="card p-3 mb-4 bg-light border-0">
-          <h6 class="text-dark fw-bold mb-3"><i class="fa-solid fa-plus me-2 text-primary"></i>Add Grade Record</h6>
+          <h6 class="text-dark fw-bold mb-3"><i class="fa-solid fa-plus me-2 text-dark"></i>Add Grade Record</h6>
           <div class="row g-2">
             <div class="col-md-4">
               <select class="form-select form-select-sm" [(ngModel)]="newMarkSubject">
@@ -222,20 +227,26 @@
             <div class="col-md-3">
               <input type="date" class="form-control form-control-sm" [(ngModel)]="newMarkDate">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <div class="input-group input-group-sm">
                 <span class="input-group-text bg-white text-muted small">Max Marks</span>
-                <input type="number" class="form-control" [(ngModel)]="newMarkMax">
+                <input type="number" class="form-control" [(ngModel)]="newMarkMax" [disabled]="isAbsent">
               </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
               <div class="input-group input-group-sm">
-                <span class="input-group-text bg-white text-muted small">Obtained Marks</span>
-                <input type="number" class="form-control" [(ngModel)]="newMarkObtained">
+                <span class="input-group-text bg-white text-muted small">Obtained</span>
+                <input type="number" class="form-control" [(ngModel)]="newMarkObtained" [disabled]="isAbsent">
+              </div>
+            </div>
+            <div class="col-md-2 d-flex align-items-center justify-content-center">
+              <div class="form-check form-switch m-0">
+                <input class="form-check-input" type="checkbox" role="switch" id="absentSwitch" [(ngModel)]="isAbsent">
+                <label class="form-check-label text-muted small ms-1" for="absentSwitch">Absent</label>
               </div>
             </div>
             <div class="col-md-3 d-grid">
-              <button class="btn btn-primary btn-sm" (click)="addTestMark()" [disabled]="isHubActionLoading">
+              <button class="btn btn-accent btn-sm" (click)="addTestMark()" [disabled]="isHubActionLoading">
                 <i class="fa-solid fa-plus me-1"></i>Add
               </button>
             </div>
@@ -260,9 +271,9 @@
               <tr *ngFor="let mark of studentMarks">
                 <td class="fw-bold">{{ mark.subject }}</td>
                 <td>{{ mark.test_name }}</td>
-                <td><strong>{{ mark.obtained_marks }}</strong> / {{ mark.max_marks }} ({{ mark.percentage }}%)</td>
+                <td><strong>{{ mark.grade === 'AB' ? 'AB' : mark.obtained_marks }}</strong> / {{ mark.max_marks }} ({{ mark.percentage }}%)</td>
                 <td>
-                  <span class="badge bg-success" [class.bg-danger]="mark.grade === 'F'">{{ mark.grade }}</span>
+                  <span class="badge" [class.bg-success]="mark.grade !== 'F' && mark.grade !== 'AB'" [class.bg-danger]="mark.grade === 'F'" [class.bg-secondary]="mark.grade === 'AB'">{{ mark.grade }}</span>
                 </td>
                 <td>{{ mark.test_date | date:'shortDate' }}</td>
                 <td class="text-end">
@@ -284,7 +295,7 @@
 
         <!-- Add Payment Box -->
         <div class="card p-3 mb-4 bg-light border-0">
-          <h6 class="text-dark fw-bold mb-3"><i class="fa-solid fa-credit-card me-2 text-primary"></i>Add Manual Fee Payment</h6>
+          <h6 class="text-dark fw-bold mb-3"><i class="fa-solid fa-credit-card me-2 text-dark"></i>Add Manual Fee Payment</h6>
           <div class="row g-2 align-items-center">
             <div class="col-md-5">
               <select class="form-select form-select-sm" [(ngModel)]="newPaymentCourse">
@@ -303,7 +314,7 @@
               </div>
             </div>
             <div class="col-md-3 d-grid">
-              <button class="btn btn-primary btn-sm" (click)="addPayment()" [disabled]="isHubActionLoading">
+              <button class="btn btn-accent btn-sm" (click)="addPayment()" [disabled]="isHubActionLoading">
                 <i class="fa-solid fa-circle-check me-1"></i>Post Fee
               </button>
             </div>

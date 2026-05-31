@@ -117,13 +117,67 @@
             </div>
           </div>
 
+          <!-- Interactive Credit Card Mockup Container -->
+          <div class="card-visualizer-container mb-4">
+            <div class="credit-card-mockup" [class.flipped]="isCardFlipped">
+              
+              <!-- Front of Card -->
+              <div class="card-face card-front">
+                <div class="card-chip-brand">
+                  <div class="card-chip-icon">
+                    <svg viewBox="0 0 100 100" class="chip-svg">
+                      <rect x="10" y="10" width="80" height="80" rx="15" fill="#facc15" opacity="0.95"/>
+                      <line x1="10" y1="35" x2="90" y2="35" stroke="#1e293b" stroke-width="2.5"/>
+                      <line x1="10" y1="65" x2="90" y2="65" stroke="#1e293b" stroke-width="2.5"/>
+                      <line x1="35" y1="10" x2="35" y2="90" stroke="#1e293b" stroke-width="2.5"/>
+                      <line x1="65" y1="10" x2="65" y2="90" stroke="#1e293b" stroke-width="2.5"/>
+                    </svg>
+                  </div>
+                  <div class="card-brand-logo">
+                    <i class="fa-brands fa-cc-visa text-white fs-2"></i>
+                  </div>
+                </div>
+
+                <div class="card-number-display mb-4">
+                  {{ formattedCardNumberMock }}
+                </div>
+
+                <div class="card-meta-details d-flex justify-content-between">
+                  <div class="meta-item">
+                    <span class="meta-label">Card Holder</span>
+                    <span class="meta-val">{{ cardNameValue || 'CARDHOLDER NAME' | uppercase }}</span>
+                  </div>
+                  <div class="meta-item text-end">
+                    <span class="meta-label">Expires</span>
+                    <span class="meta-val">{{ cardExpiryValue || 'MM/YY' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back of Card -->
+              <div class="card-face card-back">
+                <div class="card-magnetic-strip"></div>
+                <div class="card-signature-area mt-4 p-2 d-flex justify-content-between align-items-center">
+                  <div class="signature-lines"></div>
+                  <div class="card-cvv-display">
+                    {{ cardCvvValue || '•••' }}
+                  </div>
+                </div>
+                <div class="card-back-branding mt-3 text-end px-3">
+                  <span class="text-white small opacity-50 font-heading" style="font-size: 0.72rem;">Future Secure Gateway</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
           <!-- Cardholder Name -->
           <div class="form-group-custom">
             <label for="cardName" class="form-label-custom">Cardholder Name</label>
             <div class="input-icon-container">
               <i class="fa-solid fa-id-card"></i>
               <input type="text" formControlName="cardName" id="cardName" class="form-input-custom" 
-                     [class.is-invalid]="isCardInvalid('cardName')" placeholder="Name as printed on card">
+                     (focus)="isCardFlipped = false" [class.is-invalid]="isCardInvalid('cardName')" placeholder="Name as printed on card">
             </div>
             <div *ngIf="isCardInvalid('cardName')" class="validation-error-text">Cardholder name is required.</div>
           </div>
@@ -134,7 +188,7 @@
             <div class="input-icon-container">
               <i class="fa-solid fa-credit-card"></i>
               <input type="text" formControlName="cardNumber" id="cardNumber" class="form-input-custom" 
-                     (input)="formatCardNumber($event)" [class.is-invalid]="isCardInvalid('cardNumber')" placeholder="16-Digit Card Number">
+                     (focus)="isCardFlipped = false" (input)="formatCardNumber($event)" [class.is-invalid]="isCardInvalid('cardNumber')" placeholder="16-Digit Card Number">
             </div>
             <div *ngIf="isCardInvalid('cardNumber')" class="validation-error-text">Valid 16-digit card number is required.</div>
           </div>
@@ -147,7 +201,7 @@
                 <div class="input-icon-container">
                   <i class="fa-solid fa-calendar-days"></i>
                   <input type="text" formControlName="expiry" id="expiry" class="form-input-custom" 
-                         (input)="formatExpiry($event)" [class.is-invalid]="isCardInvalid('expiry')" placeholder="MM/YY">
+                         (focus)="isCardFlipped = false" (input)="formatExpiry($event)" [class.is-invalid]="isCardInvalid('expiry')" placeholder="MM/YY">
                 </div>
                 <div *ngIf="isCardInvalid('expiry')" class="validation-error-text">Expiry (MM/YY) is required.</div>
               </div>
@@ -160,7 +214,7 @@
                 <div class="input-icon-container">
                   <i class="fa-solid fa-key"></i>
                   <input type="password" formControlName="cvv" id="cvv" class="form-input-custom" 
-                         (input)="formatCVV($event)" [class.is-invalid]="isCardInvalid('cvv')" placeholder="3-Digits">
+                         (focus)="isCardFlipped = true" (blur)="isCardFlipped = false" (input)="formatCVV($event)" [class.is-invalid]="isCardInvalid('cvv')" placeholder="3-Digits">
                 </div>
                 <div *ngIf="isCardInvalid('cvv')" class="validation-error-text">CVV is required (3 digits).</div>
               </div>

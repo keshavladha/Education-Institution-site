@@ -7,14 +7,30 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: var(--light-bg);
+}
+
+.hero-section-custom::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.16) 0%, rgba(147, 197, 253, 0.14) 30%, rgba(251, 207, 232, 0.1) 60%, transparent 100%);
+  filter: blur(60px);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .hero-title-custom {
   font-size: 3.75rem;
   font-weight: 800;
-  color: white;
-  text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  color: var(--dark-text);
+  position: relative;
+  z-index: 2;
 }
 
 .year-section-custom {
@@ -35,8 +51,7 @@
   font-weight: 800;
   margin-bottom: 2.5rem;
   text-align: center;
-  color: var(--accent);
-  text-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  color: var(--primary);
 }
 
 .glow-orb {

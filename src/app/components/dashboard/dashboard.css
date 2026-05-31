@@ -1,28 +1,26 @@
 /* ═══════════════════════════════════════════
    Student Dashboard – Premium Styling
-═══════════════════════════════════════════ */
+   ═══════════════════════════════════════════ */
 
 .dashboard-container {
-  background: linear-gradient(135deg, #EEF1FB 0%, #F8F9FC 100%);
+  background-color: var(--light-bg);
   min-height: 85vh;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── Profile Card ─────────────────────────── */
 
 .profile-card {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 16px 50px rgba(72, 92, 215, 0.08);
+  background: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.015);
   border-radius: 20px;
   overflow: hidden;
 }
 
 /* Gradient header banner */
 .profile-header {
-  background: linear-gradient(135deg, #2E3FA3 0%, #485CD7 60%, #6B7CE0 100%);
+  background: linear-gradient(135deg, #171717 0%, #333333 100%);
   padding: 2rem 2.5rem;
   display: flex;
   align-items: center;
@@ -34,29 +32,29 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  border: 3px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  border: 3px solid rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
   font-weight: 800;
   color: #fff;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-heading);
   flex-shrink: 0;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.1);
 }
 
 .profile-name {
   color: #fff;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-heading);
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 0.2rem;
 }
 
 .profile-role {
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -82,7 +80,7 @@
 
 .info-divider {
   width: 1px;
-  background: linear-gradient(to bottom, transparent, rgba(72, 92, 215, 0.15), transparent);
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.08), transparent);
   align-self: stretch;
   min-height: 120px;
 }
@@ -90,7 +88,7 @@
 .section-label {
   font-size: 0.9rem;
   font-weight: 700;
-  color: hsl(220, 80%, 40%);
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.6px;
   margin-bottom: 1.25rem;
@@ -110,24 +108,24 @@
 .info-label {
   font-size: 0.78rem;
   font-weight: 600;
-  color: hsl(220, 15%, 55%);
+  color: var(--light-text);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .info-label i {
-  color: #485CD7;
+  color: var(--primary);
   margin-right: 0.35rem;
 }
 
 .info-value {
   font-size: 1rem;
   font-weight: 600;
-  color: hsl(220, 25%, 15%);
+  color: var(--dark-text);
 }
 
 .info-highlight {
-  color: hsl(220, 85%, 30%);
+  color: var(--primary);
   font-size: 1.05rem;
 }
 
@@ -144,22 +142,22 @@
 }
 
 .status-badge.complete {
-  background: rgba(40, 167, 69, 0.1);
-  color: #155724;
-  border: 1px solid rgba(40, 167, 69, 0.25);
+  background: rgba(16, 185, 129, 0.1);
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
 .status-badge.pending {
-  background: rgba(255, 193, 7, 0.12);
-  color: #856404;
-  border: 1px solid rgba(255, 193, 7, 0.3);
+  background: rgba(245, 158, 11, 0.12);
+  color: #92400e;
+  border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 /* ── Footer actions ───────────────────────── */
 .profile-footer {
   padding: 1.25rem 2.5rem;
-  border-top: 1px solid rgba(72, 92, 215, 0.07);
-  background: rgba(72, 92, 215, 0.02);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.01);
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
@@ -170,7 +168,7 @@
   display: inline-flex;
   align-items: center;
   padding: 0.7rem 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius-pill);
   font-weight: 700;
   font-size: 0.9rem;
   text-decoration: none;
@@ -180,52 +178,32 @@
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, #485CD7 0%, hsl(28, 100%, 45%) 100%);
+  background: var(--primary);
   color: #fff;
-  box-shadow: 0 4px 14px rgba(255, 109, 0, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
 }
 
 .action-btn.primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 7px 20px rgba(255, 109, 0, 0.35);
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.08);
+  background: #333333;
   color: #fff;
 }
 
 .action-btn.secondary {
-  background: rgba(72, 92, 215, 0.07);
-  color: hsl(220, 85%, 30%);
-  border: 1px solid rgba(72, 92, 215, 0.15);
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-.action-btn.secondary:hover {
-  background: rgba(72, 92, 215, 0.12);
-  transform: translateY(-2px);
-  color: hsl(220, 85%, 25%);
-}
-
-/* ── Section header ───────────────────────── */
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.section-title-custom {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: hsl(220, 95%, 12%);
-  margin: 0;
-}
-
-.section-title-custom i {
-  color: #485CD7;
+.action-b.section-title-custom i {
+  color: var(--primary);
 }
 
 .payment-count {
-  background: rgba(72, 92, 215, 0.08);
-  color: hsl(220, 80%, 35%);
-  border: 1px solid rgba(72, 92, 215, 0.15);
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--primary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   font-size: 0.8rem;
   font-weight: 700;
   padding: 0.25rem 0.85rem;
@@ -234,18 +212,17 @@
 
 /* ── Empty state ──────────────────────────── */
 .empty-state {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.04);
   border-radius: 16px;
   padding: 3.5rem;
   text-align: center;
-  color: hsl(220, 15%, 60%);
-  box-shadow: 0 8px 30px rgba(72, 92, 215, 0.06);
+  color: var(--light-text);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.01);
 }
 
 .empty-state i {
-  color: rgba(72, 92, 215, 0.2);
+  color: rgba(0, 0, 0, 0.06);
   display: block;
 }
 
@@ -256,11 +233,10 @@
 
 /* ── Payments table ───────────────────────── */
 .table-card {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.04);
   border-radius: 16px;
-  box-shadow: 0 10px 35px rgba(72, 92, 215, 0.07);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.015);
   overflow: hidden;
 }
 
@@ -270,11 +246,11 @@
 }
 
 .payments-table thead {
-  background: linear-gradient(135deg, #2E3FA3 0%, hsl(220, 75%, 38%) 100%);
+  background: linear-gradient(135deg, #171717 0%, #333333 100%);
 }
 
 .payments-table thead th {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   font-size: 0.82rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -285,7 +261,7 @@
 
 .payments-table tbody tr {
   transition: background 0.2s ease;
-  border-bottom: 1px solid rgba(72, 92, 215, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .payments-table tbody tr:last-child {
@@ -293,17 +269,17 @@
 }
 
 .payments-table tbody tr:hover {
-  background: rgba(72, 92, 215, 0.03);
+  background: rgba(0, 0, 0, 0.01);
 }
 
 .payments-table tbody td {
   padding: 1rem 1.25rem;
   font-size: 0.93rem;
-  color: hsl(220, 25%, 18%);
+  color: var(--dark-text);
 }
 
 .row-num {
-  color: hsl(220, 15%, 60%);
+  color: var(--light-text);
   font-size: 0.82rem;
   font-weight: 600;
   text-align: center;
@@ -311,7 +287,7 @@
 
 .amount-cell {
   font-weight: 800;
-  color: hsl(145, 63%, 35%);
+  color: var(--success);
   font-size: 1rem;
 }
 
@@ -320,7 +296,7 @@
   width: 3rem;
   height: 3rem;
   border-width: 3px;
-  color: #485CD7;
+  color: var(--primary);
 }
 
 /* ── Dashboard Tabs ──────────────────────── */
@@ -328,10 +304,10 @@
 .dashboard-tabs {
   display: flex;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.02);
   padding: 0.5rem;
   border-radius: 12px;
-  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .tab-btn {
@@ -339,7 +315,7 @@
   padding: 1rem 1.5rem;
   border: none;
   background: transparent;
-  color: hsl(220, 15%, 45%);
+  color: var(--light-text);
   font-weight: 600;
   font-size: 1rem;
   border-radius: 8px;
@@ -351,14 +327,14 @@
 }
 
 .tab-btn:hover {
-  background: rgba(255, 255, 255, 0.5);
-  color: #2E3FA3;
+  background: rgba(0, 0, 0, 0.02);
+  color: var(--primary);
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #2E3FA3 0%, hsl(220, 75%, 38%) 100%);
+  background: linear-gradient(135deg, #171717 0%, #333333 100%);
   color: white;
-  box-shadow: 0 4px 15px rgba(72, 92, 215, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 /* ── Fee Summary Cards ───────────────────── */
@@ -369,8 +345,9 @@
   gap: 1rem;
   padding: 1.5rem;
   border-radius: 12px;
-  background: white;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  background: var(--white);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .fee-summary-card i {
@@ -384,18 +361,18 @@
 }
 
 .fee-summary-card.total i {
-  color: #2E3FA3;
-  background: rgba(72, 92, 215, 0.1);
+  color: var(--primary);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .fee-summary-card.paid i {
-  color: #198754;
-  background: rgba(25, 135, 84, 0.1);
+  color: var(--success);
+  background: rgba(16, 185, 129, 0.10);
 }
 
 .fee-summary-card.pending i {
-  color: #485CD7;
-  background: rgba(255, 109, 0, 0.1);
+  color: var(--primary);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .fee-summary-card.pending.due i {
@@ -410,7 +387,7 @@
 
 .fee-label {
   font-size: 0.85rem;
-  color: hsl(220, 15%, 45%);
+  color: var(--light-text);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -418,7 +395,7 @@
 .fee-amount {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2E3FA3;
+  color: var(--primary);
 }
 
 /* ── Tab Content Animation ───────────────── */
@@ -634,7 +611,8 @@
   .footer-custom, 
   .profile-footer, 
   .dashboard-tabs, 
-  .section-header button {
+  .section-header button,
+  .notice-board-card {
     visibility: hidden;
     height: 0 !important;
     margin: 0 !important;
@@ -665,7 +643,7 @@
   }
 
   .profile-header {
-    background: #485CD7 !important;
+    background: #171717 !important;
     color: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
@@ -692,15 +670,15 @@
 
   .payments-table thead {
     display: table-header-group !important;
-    background: #EEF1FB !important;
-    color: #2E3FA3 !important;
+    background: #f5f4f2 !important;
+    color: #171717 !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
   .payments-table thead th {
-    color: #2E3FA3 !important;
-    border-bottom: 2px solid #2E3FA3 !important;
+    color: #171717 !important;
+    border-bottom: 2px solid #171717 !important;
   }
 
   .payments-table tbody tr {
@@ -722,4 +700,254 @@
     color: black !important;
     background: transparent !important;
   }
+}
+
+/* ── Notice Board Widget ──────────────────── */
+
+.notice-board-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.notice-board-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notice-board-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--dark-text);
+}
+
+.notice-board-title i {
+  color: var(--primary);
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(220, 53, 69, 0.08);
+  padding: 0.25rem 0.6rem;
+  border-radius: 50px;
+  border: 1px solid rgba(220, 53, 69, 0.15);
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background-color: #dc3545;
+  border-radius: 50%;
+  display: inline-block;
+  animation: blink 1.2s infinite ease-in-out;
+}
+
+.live-text {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #dc3545;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.notice-board-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+  max-height: 380px;
+}
+
+.announcement-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  padding-bottom: 1rem;
+}
+
+.announcement-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.announcement-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.announcement-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.announcement-tag.tag-exam {
+  background-color: var(--pastel-lavender);
+  border: 1px solid var(--pastel-lavender-border);
+  color: #6b21a8;
+}
+
+.announcement-tag.tag-resources {
+  background-color: var(--pastel-mint);
+  border: 1px solid var(--pastel-mint-border);
+  color: #065f46;
+}
+
+.announcement-tag.tag-event {
+  background-color: var(--pastel-blue);
+  border: 1px solid var(--pastel-blue-border);
+  color: #1e3a8a;
+}
+
+.announcement-date {
+  font-size: 0.75rem;
+  color: var(--light-text);
+  font-weight: 500;
+}
+
+.announcement-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: 0.35rem;
+  line-height: 1.35;
+}
+
+.announcement-desc {
+  font-size: 0.85rem;
+  color: var(--light-text);
+  line-height: 1.5;
+}
+
+@keyframes blink {
+  0% { opacity: 0.3; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0.3; transform: scale(0.9); }
+}
+
+/* ==========================================================================
+   Grade Analytics Chart & Subject Filter Pills Styling
+   ========================================================================== */
+
+.filter-pills {
+  display: inline-flex;
+  background-color: rgba(23, 23, 23, 0.03);
+  padding: 4px;
+  border-radius: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.pill-btn {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--light-text);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none !important;
+}
+
+.pill-btn:hover {
+  color: var(--primary);
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.pill-btn.active-pill {
+  background-color: var(--primary) !important;
+  color: var(--white) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.chart-card {
+  border-radius: 16px;
+  background: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.015);
+}
+
+.chart-container-inner {
+  height: 160px;
+  width: 100%;
+}
+
+.chart-grid-text {
+  font-size: 8px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  fill: var(--light-text);
+  opacity: 0.6;
+}
+
+.chart-tooltip-bubble {
+  background: rgba(23, 23, 23, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  width: 130px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.1s ease-out;
+}
+
+.chart-tooltip-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(23, 23, 23, 0.95);
+}
+
+.tooltip-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tooltip-subject {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 4px;
+}
+
+.tooltip-score {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.tooltip-grade {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 2px;
+}
+
+/* bg-dark-soft badge override */
+.bg-dark-soft {
+  background-color: rgba(23, 23, 23, 0.05);
+  color: var(--primary);
+  border: 1px solid rgba(23, 23, 23, 0.08);
 }

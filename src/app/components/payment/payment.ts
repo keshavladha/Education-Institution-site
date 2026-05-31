@@ -21,6 +21,41 @@ export class Payment implements OnInit {
   alertMessage = '';
   alertType: 'success' | 'danger' | 'warning' | '' = '';
 
+  // Checkout Card Visualizer State
+  isCardFlipped = false;
+
+  get cardNameValue(): string {
+    return this.cardForm.get('cardName')?.value || '';
+  }
+
+  get cardNumberValue(): string {
+    return this.cardForm.get('cardNumber')?.value || '';
+  }
+
+  get cardExpiryValue(): string {
+    return this.cardForm.get('expiry')?.value || '';
+  }
+
+  get cardCvvValue(): string {
+    return this.cardForm.get('cvv')?.value || '';
+  }
+
+  get formattedCardNumberMock(): string {
+    const raw = this.cardNumberValue;
+    if (!raw) return '•••• •••• •••• ••••';
+    
+    const parts = [];
+    for (let i = 0; i < 16; i += 4) {
+      const part = raw.substring(i, i + 4);
+      if (part) {
+        parts.push(part.padEnd(4, '•'));
+      } else {
+        parts.push('••••');
+      }
+    }
+    return parts.join(' ');
+  }
+
   constructor(
     private fb: FormBuilder,
     private supabaseService: SupabaseService
