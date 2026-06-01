@@ -294,3 +294,6 @@ $$ LANGUAGE plpgsql;
 -- Restrict function execution to authenticated users only
 REVOKE EXECUTE ON FUNCTION public.create_student_user FROM public;
 GRANT EXECUTE ON FUNCTION public.create_student_user TO authenticated;
+
+-- 7. Drop the legacy plain-text password column from public.students table
+ALTER TABLE public.students DROP COLUMN IF EXISTS password;
