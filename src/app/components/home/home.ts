@@ -19,6 +19,13 @@ export class Home implements OnInit {
   alertMessage = '';
   alertType: 'success' | 'danger' | 'warning' | '' = '';
 
+  subjects = [
+    { name: 'Accountancy', selected: false },
+    { name: 'Business Studies', selected: false },
+    { name: 'Economics', selected: false },
+    { name: 'Mathematics', selected: false }
+  ];
+
   constructor(
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
@@ -40,6 +47,14 @@ export class Home implements OnInit {
   isInvalid(fieldName: string): boolean {
     const control = this.contactForm.get(fieldName);
     return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  toggleSubject(index: number): void {
+    this.subjects[index].selected = !this.subjects[index].selected;
+    const selectedStr = this.subjects.filter(s => s.selected).map(s => s.name).join(', ');
+    this.contactForm.get('subject')?.setValue(selectedStr);
+    this.contactForm.get('subject')?.markAsDirty();
+    this.contactForm.get('subject')?.markAsTouched();
   }
 
   async onSubmit(): Promise<void> {
@@ -65,6 +80,7 @@ export class Home implements OnInit {
       this.alertType = 'success';
       this.alertMessage = 'Thank you for reaching out! Your enquiry has been received successfully.';
       this.contactForm.reset();
+      this.subjects.forEach(s => s.selected = false);
 
       // Trigger asynchronous email alert to administrator in background
       this.emailService.sendAdminContactNotification(name, fname, email, phone, subject, message);

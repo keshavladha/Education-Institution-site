@@ -473,18 +473,19 @@
 
             <!-- Course Interest -->
             <div class="form-group-custom">
-              <label for="subject" class="form-label-custom">Course Interested In</label>
-              <div class="input-icon-container">
-                <i class="fa-solid fa-book-open"></i>
-                <select class="form-input-custom form-select-custom" formControlName="subject" id="subject">
-                  <option value="" disabled selected>Select Course Interested In</option>
-                  <option value="Accountancy">Accountancy</option>
-                  <option value="Business Studies">Business Studies</option>
-                  <option value="Economics">Economics</option>
-                  <option value="Mathematics">Mathematics</option>
-                </select>
+              <label class="form-label-custom mb-3">Subjects Interested In *</label>
+              <div class="subjects-grid mb-3">
+                <div *ngFor="let subject of subjects; let i = index" 
+                     class="subject-checkbox-pill" 
+                     [class.selected]="subject.selected"
+                     (click)="toggleSubject(i)">
+                  <div class="checkbox-pill-box">
+                    <i class="fas fa-check" *ngIf="subject.selected"></i>
+                  </div>
+                  <span>{{ subject.name }}</span>
+                </div>
               </div>
-              <div *ngIf="isInvalid('subject')" class="validation-error-text">Please select a course.</div>
+              <div *ngIf="isInvalid('subject')" class="validation-error-text">Please select at least one subject.</div>
             </div>
 
             <!-- Message -->
