@@ -66,11 +66,8 @@ export class Payment implements OnInit {
   ngOnInit(): void {
     const student = this.supabaseService.student;
     const initialName = student?.full_name || '';
-    const initialEmail = student?.email || '';
-
     this.paymentForm = this.fb.group({
       studentName: [initialName, [Validators.required]],
-      email: [initialEmail, [Validators.required, Validators.email]],
       class: ['', [Validators.required]],
       fatherName: ['', [Validators.required]],
       course: ['', [Validators.required]],
@@ -149,7 +146,7 @@ export class Payment implements OnInit {
     }
 
     this.isLoading = true;
-    const { studentName, email, class: studentClass, fatherName, course, amount } = this.paymentForm.value;
+    const { studentName, class: studentClass, fatherName, course, amount } = this.paymentForm.value;
 
     try {
       // Simulate network request & secure authorization
@@ -162,17 +159,6 @@ export class Payment implements OnInit {
       await this.supabaseService.insertPayment(studentName, studentClass, fatherName, course, parseFloat(amount));
       
       this.currentStep = 3;
-
-      // Trigger dynamic email receipt to the student in the background
-      this.emailService.sendStudentPaymentReceipt(
-        studentName,
-        studentClass,
-        fatherName,
-        course,
-        parseFloat(amount),
-        this.transactionId,
-        email
-      );
     } catch (err: any) {
       console.error('❌ Supabase Payment Submission Error:', err.message);
       this.alertType = 'danger';
@@ -187,7 +173,6 @@ export class Payment implements OnInit {
     const student = this.supabaseService.student;
     if (student) {
       this.paymentForm.get('studentName')?.setValue(student.full_name);
-      this.paymentForm.get('email')?.setValue(student.email);
     }
     this.cardForm.reset();
     this.currentStep = 1;

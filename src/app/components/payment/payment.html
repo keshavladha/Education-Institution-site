@@ -34,17 +34,6 @@
             <div *ngIf="isInvalid('studentName')" class="validation-error-text">Student Name is required.</div>
           </div>
 
-          <!-- Student Email Address -->
-          <div class="form-group-custom">
-            <label for="email" class="form-label-custom">Email Address</label>
-            <div class="input-icon-container">
-              <i class="fa-solid fa-envelope"></i>
-              <input type="email" formControlName="email" id="email" class="form-input-custom" 
-                     [class.is-invalid]="isInvalid('email')" placeholder="e.g. student@example.com">
-            </div>
-            <div *ngIf="isInvalid('email')" class="validation-error-text">Please enter a valid email address.</div>
-          </div>
-
           <!-- Class -->
           <div class="form-group-custom">
             <label for="class" class="form-label-custom">Class / Grade</label>
