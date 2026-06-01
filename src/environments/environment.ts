@@ -5,7 +5,7 @@ export const environment = {
   emailjs: {
     publicKey: 'SC6kfyCDG_8yx2opa',
     serviceId: 'service_g90nadi',
-    contactTemplateId: 'YOUR_EMAILJS_CONTACT_TEMPLATE_ID',
+    contactTemplateId: 'template_mjutvcg',
     paymentTemplateId: 'YOUR_EMAILJS_PAYMENT_TEMPLATE_ID',
     adminEmail: 'info@futureinstitute.edu'
   }
