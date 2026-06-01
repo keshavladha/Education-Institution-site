@@ -15,6 +15,11 @@ export interface Student {
   created_at: string;
 }
 
+export const ADMIN_EMAILS = [
+  'admin@futureinstitute.edu',
+  'principal@futureinstitute.edu'
+];
+
 const SESSION_KEY = 'fic_student_session';
 
 @Injectable({
@@ -33,6 +38,47 @@ export class SupabaseService {
 
   constructor() {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
+
+    // Listen to Supabase Auth state changes reactively
+    this.supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('🔄 [Supabase] Auth state change event:', event, session);
+      if (session?.user) {
+        // Fetch or load profile from students table
+        const profile = await this.fetchStudentProfile(session.user.id);
+        if (profile) {
+          this.saveSession(profile);
+        } else {
+          // Fallback placeholder profile during registration or when database record is pending
+          const placeholder: Student = {
+            id: session.user.id,
+            full_name: session.user.user_metadata?.['full_name'] || 'Student',
+            email: session.user.email || '',
+            profile_complete: false,
+            created_at: new Date().toISOString()
+          };
+          this.saveSession(placeholder);
+        }
+      } else {
+        this.clearSession();
+      }
+    });
+  }
+
+  /** Helper: fetch student profile from students table */
+  async fetchStudentProfile(id: string): Promise<Student | null> {
+    try {
+      const { data, error } = await this.supabase
+        .from('students')
+        .select('id, full_name, email, father_name, phone, class, course, profile_complete, created_at')
+        .eq('id', id)
+        .maybeSingle();
+
+      if (error) throw error;
+      return data as Student | null;
+    } catch (e: any) {
+      console.warn('⚠️ fetchStudentProfile failed:', e.message);
+      return null;
+    }
   }
 
   // ─── Observables ──────────────────────────────────────────────
@@ -70,36 +116,45 @@ export class SupabaseService {
 
   // ─── Auth Methods ─────────────────────────────────────────────
 
-  /** Register a new student — inserts directly into the students table and saves session (used for student self-signup) */
+  /** Register a new student — registers via Supabase Auth and inserts their profile details */
   async signUp(fullName: string, email: string, password: string): Promise<Student> {
-    // Check if email already exists
-    const { data: existing } = await this.supabase
-      .from('students')
-      .select('id')
-      .eq('email', email.toLowerCase())
-      .maybeSingle();
+    // 1. Sign up via Supabase Auth
+    const { data: authData, error: authError } = await this.supabase.auth.signUp({
+      email: email.toLowerCase(),
+      password: password,
+      options: {
+        data: {
+          full_name: fullName
+        }
+      }
+    });
 
-    if (existing) {
-      throw new Error('This email is already registered. Please login instead.');
-    }
+    if (authError) throw new Error(authError.message);
+    if (!authData.user) throw new Error('Signup failed. Please try again.');
 
+    // 2. Insert into the public.students profile table (links primary key to auth.users.id)
     const { data, error } = await this.supabase
       .from('students')
       .insert([{
+        id: authData.user.id,
         full_name: fullName,
         email: email.toLowerCase(),
-        password: password
+        profile_complete: false
       }])
       .select()
       .single();
 
-    if (error) throw new Error(error.message);
+    if (error) {
+      console.error('Error inserting student profile:', error);
+      throw new Error('User created but profile setup failed: ' + error.message);
+    }
 
-    this.saveSession(data as Student);
-    return data as Student;
+    const studentProfile = data as Student;
+    this.saveSession(studentProfile);
+    return studentProfile;
   }
 
-  /** Admin-specific student creation: inserts a new student with complete details WITHOUT modifying the logged-in Admin session */
+  /** Admin-specific student creation: inserts a new student with complete details using a secure PostgreSQL RPC function */
   async createStudentByAdmin(
     fullName: string, 
     email: string, 
@@ -109,54 +164,52 @@ export class SupabaseService {
     studentClass: string, 
     course: string
   ): Promise<any> {
-    // Check if email already exists
-    const { data: existing } = await this.supabase
-      .from('students')
-      .select('id')
-      .eq('email', email.toLowerCase())
-      .maybeSingle();
-
-    if (existing) {
-      throw new Error('This email is already registered.');
-    }
-
-    const { data, error } = await this.supabase
-      .from('students')
-      .insert([{
-        full_name: fullName,
-        email: email.toLowerCase(),
-        password: password,
-        father_name: fatherName,
-        phone: phone,
-        class: studentClass,
-        course: course,
-        profile_complete: true // Set to true since admin provided all details
-      }])
-      .select()
-      .single();
+    const { data, error } = await this.supabase.rpc('create_student_user', {
+      student_email: email.toLowerCase(),
+      student_password: password,
+      full_name: fullName,
+      father_name: fatherName,
+      phone: phone,
+      student_class: studentClass,
+      course: course
+    });
 
     if (error) throw new Error(error.message);
     return data;
   }
 
-  /** Login — looks up student by email + password */
+  /** Login — signs in via Supabase Auth */
   async signIn(email: string, password: string): Promise<Student> {
-    const { data, error } = await this.supabase
-      .from('students')
-      .select('id, full_name, email, father_name, phone, class, course, profile_complete, created_at')
-      .eq('email', email.toLowerCase())
-      .eq('password', password)
-      .maybeSingle();
+    const { data: authData, error: authError } = await this.supabase.auth.signInWithPassword({
+      email: email.toLowerCase(),
+      password: password
+    });
 
-    if (error) throw new Error(error.message);
-    if (!data) throw new Error('Invalid email or password. Please try again.');
+    if (authError) throw new Error(authError.message);
+    if (!authData.user) throw new Error('Sign in failed. No user found.');
 
-    this.saveSession(data as Student);
-    return data as Student;
+    // Fetch the profile associated with this user id
+    const profile = await this.fetchStudentProfile(authData.user.id);
+    if (!profile) {
+      // Recreate a placeholder session if profile not found
+      const placeholder: Student = {
+        id: authData.user.id,
+        full_name: authData.user.user_metadata?.['full_name'] || 'Student',
+        email: authData.user.email || '',
+        profile_complete: false,
+        created_at: new Date().toISOString()
+      };
+      this.saveSession(placeholder);
+      return placeholder;
+    }
+
+    this.saveSession(profile);
+    return profile;
   }
 
-  /** Logout — clear local session */
-  signOut(): void {
+  /** Logout — clear session in auth and state */
+  async signOut(): Promise<void> {
+    await this.supabase.auth.signOut();
     this.clearSession();
   }
 

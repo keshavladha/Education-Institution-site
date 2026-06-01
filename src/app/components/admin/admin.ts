@@ -2,7 +2,7 @@ import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SupabaseService, Student } from '../../services/supabase.service';
+import { SupabaseService, Student, ADMIN_EMAILS } from '../../services/supabase.service';
 
 @Component({
   selector: 'app-admin',
@@ -68,8 +68,7 @@ export class Admin implements OnInit {
       console.log('✅ [Admin] Fetch success. Count:', data ? data.length : 0, data);
       
       // Filter out admin accounts from the students management list
-      const adminEmails = ['admin@futureinstitute.edu', 'principal@futureinstitute.edu'];
-      this.students = (data || []).filter(student => student && !adminEmails.includes(student.email));
+      this.students = (data || []).filter(student => student && !ADMIN_EMAILS.includes(student.email));
     } catch (e: any) {
       console.error('💥 [Admin] Fatal error in loadStudents:', e);
       this.errorMessage = 'Failed to load students: ' + (e.message || e);

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SupabaseService } from '../../services/supabase.service';
+import { SupabaseService, ADMIN_EMAILS } from '../../services/supabase.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -33,8 +33,7 @@ export class Login {
     const email = this.loginForm.value.email?.toLowerCase() || '';
     const password = this.loginForm.value.password || '';
 
-    const adminEmails = ['admin@futureinstitute.edu', 'principal@futureinstitute.edu'];
-    if (adminEmails.includes(email)) {
+    if (ADMIN_EMAILS.includes(email)) {
       this.errorMessage = 'Admin logins are not allowed here. Please use the dedicated Admin Portal.';
       this.isLoading = false;
       return;

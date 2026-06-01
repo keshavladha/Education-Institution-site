@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SupabaseService } from '../../services/supabase.service';
+import { SupabaseService, ADMIN_EMAILS } from '../../services/supabase.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -16,7 +16,7 @@ export class AdminLogin {
   private supabase = inject(SupabaseService);
   private router = inject(Router);
 
-  adminEmails = ['admin@futureinstitute.edu', 'principal@futureinstitute.edu'];
+  adminEmails = ADMIN_EMAILS;
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
