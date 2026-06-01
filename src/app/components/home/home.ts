@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase.service';
+import { EmailService } from '../../services/email.service';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,8 @@ export class Home implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private supabaseService: SupabaseService
+    private supabaseService: SupabaseService,
+    private emailService: EmailService
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +65,9 @@ export class Home implements OnInit {
       this.alertType = 'success';
       this.alertMessage = 'Thank you for reaching out! Your enquiry has been received successfully.';
       this.contactForm.reset();
+
+      // Trigger asynchronous email alert to administrator in background
+      this.emailService.sendAdminContactNotification(name, fname, email, phone, subject, message);
     } catch (err: any) {
       console.error('❌ Supabase Submission Error:', err.message);
       this.alertType = 'danger';
