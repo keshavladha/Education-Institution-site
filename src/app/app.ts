@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SupabaseService, ADMIN_EMAILS } from './services/supabase.service';
@@ -19,6 +19,7 @@ export class App implements OnInit {
 
   private supabase = inject(SupabaseService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   // Admin email list - these emails have admin access
   private readonly adminEmails = ADMIN_EMAILS;
@@ -29,11 +30,13 @@ export class App implements OnInit {
       this.isLoggedIn = !!student;
       this.isAdmin = student ? this.adminEmails.includes(student.email) : false;
       this.studentName = student?.full_name || '';
+      this.cdr.detectChanges(); // Force UI update immediately
     });
   }
 
-  logout() {
-    this.supabase.signOut();
+  async logout() {
+    await this.supabase.signOut();
     this.router.navigate(['/']);
+    this.cdr.detectChanges(); // Force UI update immediately after logout
   }
 }
